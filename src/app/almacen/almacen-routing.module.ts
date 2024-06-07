@@ -4,7 +4,10 @@ import { AgregarAlmacenComponent } from './pages/agregar/agregar.component';
 import { AsignarAlmacenComponent } from './pages/asignar/asignar.component';
 import { ListadoAlmacenComponent } from './pages/listado/listado.component';
 
+
 export const routes: Routes = [
+  //Layout de autorizacion
+
 {
   path: 'agregar',
   component: AgregarAlmacenComponent

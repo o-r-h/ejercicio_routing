@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
+import { MaterialModule } from '../material/material.module';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 import { AgregarAlmacenComponent } from './pages/agregar/agregar.component';
@@ -14,7 +15,10 @@ import { AlmacenRoutingModule } from './almacen-routing.module';  //IMPORTANTE P
   imports: [
     CommonModule,
     SharedModule,
-    AlmacenRoutingModule
+    AlmacenRoutingModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    MaterialModule
   ],
   exports: [],
   declarations: [

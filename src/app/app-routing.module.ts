@@ -1,36 +1,53 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
+import { Error404PageComponent } from './shared/pages/Error404Page/Error404Page.component';
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  {
-    path: 'home',
-    component: HomeComponent
-  },
+
+
   // {
-  //   path:,
-  //   component:
+  //   path: 'home',
+  //   loadChildren: () => import('./home/home.component').then( m => m.HomeComponent ),
   // },
   {
-    path: 'llantas',
-    loadChildren: ()=>import('./llantas/llantas.module').then(m=>m.LlantasModule)
+    path: 'home',
+    component: HomeComponent,
+  },
+
+  // {
+  //   path: '404',
+  //   component: Error404PageComponent,
+  // },
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
+  },
+
+  {
+    path: '**',
+    redirectTo: '404'
+  },
+
+  {
+    path: 'chofer',
+    loadChildren: ()=>import('./chofer/chofer.module').then(m=>m.ChoferModule)
   },
   {
     path: 'almacen',
     loadChildren: () => import('./almacen/almacen.module').then(m=>m.AlmacenModule)
-  },
-  { path: '**',
-      redirectTo: 'home'
   },
 
 
 ]
 
 @NgModule({
-  imports :[
-    RouterModule.forRoot( routes)
+  imports: [
+    RouterModule.forRoot(routes)
   ],
-  exports : [
+  exports: [
     RouterModule,
   ]
 })

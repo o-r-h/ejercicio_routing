@@ -1,1 +1,41 @@
 <p>agregar almacen works!</p>
+<div class="pa2" [formGroup]="userForm">
+  <h1>User Profile</h1>
+  <div>
+    <mat-form-field class="example-full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field>
+      <mat-label>Contact Type</mat-label>
+      <mat-select formControlName="contactType">
+        <mat-option *ngFor="let contact of contactType" [value]="contact">
+          {{contact}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div *ngIf="isContactTypePhone">
+    <mat-form-field class="example-full-width">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phone">
+    </mat-form-field>
+  </div>
+  <div *ngIf="isContactTypeEmail">
+    <mat-form-field class="example-full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+  </div>
+
+  <div class="pt3">
+    Form Valid State: <span class="b">{{ userForm.valid }}</span>
+  </div>
+
+  <div class="pt3">
+    <div class="b">Form Value</div>
+    <pre>{{userForm.value | json}}</pre>
+  </div>
+</div>
