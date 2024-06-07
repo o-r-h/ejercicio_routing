@@ -1,7 +1,8 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
+<nav class="navbar navbar-custom  navbar-dark navbar-expand-lg  ">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
-      <h2>Routing </h2>
+      <h3>PICK AND GO </h3>
+
     </a>
     <button
       (click)="toggleNavbarCollapsing()"
@@ -22,7 +23,7 @@
     >
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" routerLink="home" >Home</a>
+          <a class="nav-link active" aria-current="page" routerLink="home" >Inicio</a>
         </li>
 
         <li class="nav-item dropdown">
@@ -34,13 +35,13 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Almacen
+            Operaciones
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" routerLink="almacen/agregar">Agregar</a></li>
-            <li><a class="dropdown-item" routerLink="almacen/listado" >Listado</a></li>
+            <li><a class="dropdown-item" routerLink="almacen/agregar">Vines</a></li>
+            <li><a class="dropdown-item" routerLink="almacen/listado" >Guias</a></li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" routerLink="almacen/asignar" >Asignar Item</a></li>
+            <li><a class="dropdown-item" routerLink="almacen/asignar" >Liquidaciones</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -52,11 +53,17 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Llantas
+            Mantenimientos
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" routerLink="llantas/agregar">Agregar</a></li>
-            <li><a class="dropdown-item" routerLink="llantas/listado">Listado</a></li>
+            <li><a class="dropdown-item" routerLink="llantas/agregar">Entidades</a></li>
+            <li><a class="dropdown-item" routerLink="llantas/listado">Establecimientos</a></li>
+            <li><a class="dropdown-item" routerLink="llantas/listado">Tarifarios</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" routerLink="llantas/listado">Vehiculos</a></li>
+            <li><a class="dropdown-item" routerLink="llantas/listado">Marca-Modelo</a></li>
+            <li><a class="dropdown-item" routerLink="llantas/listado">Choferes</a></li>
+
 
           </ul>
         </li>
@@ -69,11 +76,11 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Vehiculo
+            Seguridad
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Agregar</a></li>
-            <li><a class="dropdown-item" href="#">Listado</a></li>
+            <li><a class="dropdown-item" href="#">Usuario</a></li>
+            <li><a class="dropdown-item" href="#">Accesos</a></li>
 
           </ul>
         </li>
@@ -83,10 +90,10 @@
         <input
           class="form-control me-2"
           type="search"
-          placeholder="Id Vehiculo"
+          placeholder="Nro Vin"
           aria-label="Search"
         />
-        <button class="btn btn-outline-success" type="submit">Buscar</button>
+        <button class="btn btn-outline-light" type="submit">Buscar</button>
       </form>
     </div>
   </div>

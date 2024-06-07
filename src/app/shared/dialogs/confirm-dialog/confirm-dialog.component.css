@@ -1,0 +1,16 @@
+/* Estilos para el diálogo de confirmación */
+.mat-dialog-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.mat-dialog-content {
+  font-size: 16px;
+}
+
+.mat-mdc-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+

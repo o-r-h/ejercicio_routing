@@ -1,0 +1,81 @@
+<app-navbar></app-navbar>
+<form class="pa2" [formGroup]="userForm" (ngSubmit)="onSubmit()" >
+  <mat-card class="chofer-card card" >
+    <mat-card-header>
+      <mat-card-title><h1>Chofer<small>Mantenimiento</small></h1></mat-card-title>
+
+    </mat-card-header>
+    <mat-card-content>
+      <div class="grid-container">
+        <div class="form-group">
+
+          <mat-form-field appearance="fill">
+
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" />
+            <mat-error *ngIf="userForm.get('nombre')?.hasError('required')">
+              This field is required
+            </mat-error>
+
+          </mat-form-field>
+
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Apellido Paterno</mat-label>
+            <input matInput formControlName="apellidoPaterno" />
+            <mat-error *ngIf="userForm.get('apellidoPaterno')?.hasError('required')">
+              This field is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Apellido Materno</mat-label>
+            <input matInput formControlName="apellidoMaterno" />
+            <mat-error *ngIf="userForm.get('apellidoMaterno')?.hasError('required')">
+              This field is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Tipo de Documento</mat-label>
+            <mat-select formControlName="tipoDocumento">
+              <mat-option *ngFor="let tipo of tiposDocumento" [value]="tipo.value">
+                {{ tipo.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Número de Documento</mat-label>
+            <input matInput formControlName="numeroDocumento" />
+            <mat-error *ngIf="userForm.get('brevete')?.hasError('max')">
+              valor no debe ser mayor a  99999999999
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Brevete</mat-label>
+            <input matInput formControlName="brevete" />
+            <mat-error *ngIf="userForm.get('brevete')?.hasError('required')">
+              This field is required
+            </mat-error>
+            <mat-error *ngIf="userForm.get('brevete')?.hasError('max')">
+              valor no debe ser mayor a  99999999999
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions style="display: flex; justify-content: flex-end; gap: 16px;">
+      <button mat-raised-button color="primary" type="submit">Guardar</button>
+      <button mat-raised-button color="secondary" type="button" (click)="onBack()">Regresar</button>
+    </mat-card-actions>
+  </mat-card>
+
+</form>
+
