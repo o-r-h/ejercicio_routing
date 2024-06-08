@@ -1,8 +1,9 @@
-export interface modelo {
+export interface Transporte {
   id: number;
-  idMarca: number | null;
-  nombre: string;
-  peso: string;
+  placa: string;
+  registroMTC: string;
+  fichaInscripcion: string;
+  tipo: string;
   createdAt: string | null;
   createdBy: string;
   modifiedAt: string | null;

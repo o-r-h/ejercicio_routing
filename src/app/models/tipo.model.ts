@@ -1,7 +1,6 @@
-export interface marca {
+export interface Tipo {
   id: number;
   nombre: string;
-  peso: string;
   createdAt: string | null;
   createdBy: string;
   modifiedAt: string | null;

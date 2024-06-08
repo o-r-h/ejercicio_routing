@@ -1,4 +1,4 @@
-export interface color {
+export interface Color {
   id: number;
   idEntidad: number;
   nombre: string;

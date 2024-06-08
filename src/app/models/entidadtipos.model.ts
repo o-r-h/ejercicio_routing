@@ -1,9 +1,7 @@
-export interface transporte {
+export interface EntidadTipos {
   id: number;
-  placa: string;
-  registroMTC: string;
-  fichaInscripcion: string;
-  tipo: string;
+  idEntidad: number | null;
+  idTipoEntidad: number | null;
   createdAt: string | null;
   createdBy: string;
   modifiedAt: string | null;

@@ -1,4 +1,4 @@
-export interface ubigeo {
+export interface Ubigeo {
     id: number;
     codigoSunat: string;
     nombre: string;

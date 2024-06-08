@@ -1,4 +1,4 @@
-export interface tarifario {
+export interface Tarifario {
   id: number;
   idCliente: number | null;
   nombre: string;

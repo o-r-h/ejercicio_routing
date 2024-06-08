@@ -1,7 +1,10 @@
-export interface entidadtipos {
+export interface Establecimiento {
   id: number;
   idEntidad: number | null;
-  idTipoEntidad: number | null;
+  nombre: string;
+  direccion: string;
+  ubigeo: string;
+  tipoEstablecimiento: string;
   createdAt: string | null;
   createdBy: string;
   modifiedAt: string | null;

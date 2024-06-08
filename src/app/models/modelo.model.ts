@@ -1,10 +1,8 @@
-export interface establecimiento {
+export interface Modelo {
   id: number;
-  idEntidad: number | null;
+  idMarca: number | null;
   nombre: string;
-  direccion: string;
-  ubigeo: string;
-  tipoEstablecimiento: string;
+  peso: string;
   createdAt: string | null;
   createdBy: string;
   modifiedAt: string | null;

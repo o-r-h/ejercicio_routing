@@ -8,13 +8,13 @@ import { MatDialog } from '@angular/material/dialog'
 
 
 //modelos
-import { chofer } from 'src/app/models/chofer';
+import { Chofer } from 'src/app/models/chofer.model';
 import { UtilsService } from 'src/app/helpers/utils.service';
 import { ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 
 
 
-const ELEMENT_CHOFER: chofer[] = [];
+const ELEMENT_CHOFER: Chofer[] = [];
 
 @Component({
   selector: 'chofer-listado',
@@ -31,7 +31,7 @@ export class ListadoChoferComponent  implements OnInit{
 
   //table
   displayedColumns: string[] = ['id', 'nombre', 'apellidopaterno', 'apellidomaterno', 'tipoDocumento', 'nroDocumento', 'brevete', 'actions'];
-  dataSource = new MatTableDataSource<chofer>(ELEMENT_CHOFER);
+  dataSource = new MatTableDataSource<Chofer>(ELEMENT_CHOFER);
 
   filterValues = {
     nombre:  '',
@@ -82,7 +82,7 @@ export class ListadoChoferComponent  implements OnInit{
     this.dataSource.data = ELEMENT_CHOFER;
 
     // Configure filter predicate
-    this.dataSource.filterPredicate = (data: chofer, filter: string): boolean => {
+    this.dataSource.filterPredicate = (data: Chofer, filter: string): boolean => {
       const filterValues = JSON.parse(filter);
       return (!filterValues.nombre || data.nombre.toLowerCase().includes(filterValues.nombre.toLowerCase())) &&
              (!filterValues.apellidoPaterno || data.apellidoPaterno.toLowerCase().includes(filterValues.apellidoPaterno.toLowerCase()));
@@ -105,12 +105,12 @@ export class ListadoChoferComponent  implements OnInit{
     this.dataSource.filter = JSON.stringify(this.filterValues);
   }
 
-  editElement(element: chofer): void {
+  editElement(element: Chofer): void {
     console.log('Edit', element);
     // Lógica para editar el elemento
   }
 
-  deleteElement(element: chofer): void {
+  deleteElement(element: Chofer): void {
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
