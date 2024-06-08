@@ -1,4 +1,4 @@
-export interface chofer {
+export interface Chofer {
   id: number;
   nombre: string;
   apellidoPaterno: string;

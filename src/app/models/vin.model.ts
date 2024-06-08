@@ -1,4 +1,4 @@
-export interface vin {
+export interface Vin {
   id: number;
   nroVin: string;
   idCliente: number | null;

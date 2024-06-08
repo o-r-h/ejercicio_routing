@@ -1,4 +1,4 @@
-export interface entidad {
+export interface Entidad {
   id: number;
   razonSocial: string;
   idTipoDocumento: number | null;

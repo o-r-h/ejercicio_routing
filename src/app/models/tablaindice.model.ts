@@ -1,4 +1,4 @@
-export interface tablaindice {
+export interface TablaIndice {
   id: number;
   modulo: string;
   campo: string;
