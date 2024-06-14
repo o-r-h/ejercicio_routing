@@ -94,7 +94,7 @@ export class ChoferFinderDialogComponent implements OnInit{
     this.resetTable();
     this.sieve.page = null; // Reset to first page on filter
     this.sieve.pageSize=null;
-    this.getTotalRegistrosChoferes()
+    this.getTotalRegistrosChoferes() //obtener la cantidad de registros
     this.loadData();
 
   }
