@@ -14,7 +14,7 @@
             <mat-label>Nombre</mat-label>
             <input matInput formControlName="nombre" />
             <mat-error *ngIf="userForm.get('nombre')?.hasError('required')">
-              This field is required
+              Este campo es requerido
             </mat-error>
 
           </mat-form-field>
@@ -25,7 +25,7 @@
             <mat-label>Apellido Paterno</mat-label>
             <input matInput formControlName="apellidoPaterno" />
             <mat-error *ngIf="userForm.get('apellidoPaterno')?.hasError('required')">
-              This field is required
+              Este campo es requerido
             </mat-error>
           </mat-form-field>
         </div>
@@ -34,7 +34,7 @@
             <mat-label>Apellido Materno</mat-label>
             <input matInput formControlName="apellidoMaterno" />
             <mat-error *ngIf="userForm.get('apellidoMaterno')?.hasError('required')">
-              This field is required
+              Este campo es requerido
             </mat-error>
           </mat-form-field>
         </div>
@@ -62,7 +62,7 @@
             <mat-label>Brevete</mat-label>
             <input matInput formControlName="brevete" />
             <mat-error *ngIf="userForm.get('brevete')?.hasError('required')">
-              This field is required
+              Este campo es requerido
             </mat-error>
             <mat-error *ngIf="userForm.get('brevete')?.hasError('max')">
               valor no debe ser mayor a  99999999999

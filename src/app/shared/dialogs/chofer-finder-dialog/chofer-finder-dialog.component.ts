@@ -1,34 +1,30 @@
-
-import { Component ,OnInit, ViewChild  } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { CommonModule } from '@angular/common';
+import { Component ,OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder,FormGroup  } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog'
-
-
-//modelos
 import { Chofer } from 'src/app/models/chofer.model';
-import { Sieve } from 'src/app/models/sieve.model';
-import { ChoferDataService } from '../../../../data/chofer/chofer-data.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { UtilsService } from 'src/app/helpers/utils.service';
-import { ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { ChoferDataService } from '../../../../data/chofer/chofer-data.service';
+import { Sieve } from 'src/app/models/sieve.model';
+
+
 
 
 @Component({
-  selector: 'chofer-listado',
-  templateUrl: './listado.component.html',
-  styleUrls: ['./listado.component.css']
+  selector: 'app-chofer-finder-dialog',
+  templateUrl: 'chofer-finder-dialog.component.html',
+  styleUrls: ['./chofer-finder-dialog.component.css'],
+
 })
 
 
-
-
-
-export class ListadoChoferComponent  implements OnInit{
+export class ChoferFinderDialogComponent implements OnInit{
 
   //table
-  displayedColumns: string[] = ['id', 'nombre', 'apellidopaterno', 'apellidomaterno', 'tipoDocumento', 'nroDocumento', 'brevete', 'actions'];
+  displayedColumns: string[] = ['id', 'nombre', 'apellidopaterno', 'apellidomaterno', 'nroDocumento',  'actions'];
   dataSource = new MatTableDataSource<Chofer>();
   choferes: Chofer[] = [];
   totalItems: number = 0;
@@ -47,63 +43,61 @@ export class ListadoChoferComponent  implements OnInit{
     sorts: ''
   };
 
-
-  filterValues = {
-    nombre:  '',
-    apellidoPaterno: ''
-  };
-
-
-
   //paginador
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+
+
   filterForm: FormGroup;
-
-
 
   constructor(
     private utilsServices: UtilsService,
     private fb: FormBuilder,
     private router: Router,
     public dialog: MatDialog,
+    public dialogRef: MatDialogRef<ChoferFinderDialogComponent>,
     private choferDataService: ChoferDataService
-    ) {
+    ){
 
-
-    this.filterForm = this.fb.group({
-      nombre: [''],
-      apellidoPaterno: ['']
-    });
+      this.filterForm = this.fb.group({
+        nombre: [''],
+        apellidoPaterno: [''],
+        apellidoMaterno: [''],
+        numeroDocumento: [''],
+      });
 
 
   }
 
   ngOnInit(): void {
-
+    //this.getFilteredChoferes();
+    // this.dataSource.paginator = this.paginator;
+    // this.paginator.page.subscribe(() => this.loadData());
   }
 
-
   onChangePage(event:any){
-    //  this.filterProperties.emit(event)
-      console.log('event' , event["pageIndex"])
+  //  this.filterProperties.emit(event)
+    console.log('event' , event["pageIndex"])
 
-      this.sieve.page = event["pageIndex"] ;
-      this.loadData();
-    }
-
-
-  applyFilter(): void {
-    this.sieve.filters = "nombre@=*" + this.filterForm.controls["nombre"].value   +
-                         ",apellidoPaterno@=*" +this.filterForm.controls["apellidoPaterno"].value;
-
-    this.resetTable();
-    this.sieve.page = null; // Reset to first page on filter
-    this.sieve.pageSize=null;
-    this.getTotalRegistrosChoferes() //obtener la cantidad de registros
+    this.sieve.page = event["pageIndex"] ;
     this.loadData();
   }
 
+  applyFilter(): void {
+    //this.filterValues = this.filterForm.value;
+    this.sieve.filters = "nombre@=*" + this.filterForm.controls["nombre"].value   +
+                         ",apellidoPaterno@=*" +this.filterForm.controls["apellidoPaterno"].value +
+                         ",apellidoPaterno@=*" +this.filterForm.controls["apellidoPaterno"].value +
+                         ",numeroDocumento@=*" +this.filterForm.controls["numeroDocumento"].value ;
+    //this.dataSource.filter = JSON.stringify(this.sieve);
+    //this.getFilteredChoferes();
+    this.resetTable();
+    this.sieve.page = null; // Reset to first page on filter
+    this.sieve.pageSize=null;
+    this.getTotalRegistrosChoferes()
+    this.loadData();
+
+  }
   resetTable(): void {
     this.dataSource.data = []; // Clear table data
     this.paginator.firstPage(); // Reset paginator to first page
@@ -149,31 +143,19 @@ export class ListadoChoferComponent  implements OnInit{
   }
 
 
-  editElement(element: Chofer): void {
-    console.log('Edit', element);
-    // Lógica para editar el elemento
+  // //importante para la paginacion
+  // ngAfterViewInit() {
+  //   this.dataSource.paginator = this.paginator
+
+  // }
+
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
-  deleteElement(element: Chofer): void {
 
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        message: `¿Está seguro de que desea eliminar el registro de ${element.nombre} ${element.apellidoPaterno}?`
-      }
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Si se confirma la eliminación, se elimina el elemento
-        console.log('Delete', element);
-        this.dataSource.data = this.dataSource.data.filter(item => item.id !== element.id);
-      }
-    });
-
-  }
-
-  navigateToAgregar() {
-    console.log(1);
-    this.router.navigate(['/chofer/agregar']);
-  }
 }
+
+
