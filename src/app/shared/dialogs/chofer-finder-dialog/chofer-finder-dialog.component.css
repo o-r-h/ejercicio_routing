@@ -1,0 +1,49 @@
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Espacio entre los elementos */
+}
+
+.mat-form-field {
+  flex: 1 1 200px; /* Ajusta el tamaño mínimo y flexibilidad de los campos */
+  margin-bottom: 16px; /* Espacio debajo de cada campo */
+}
+
+h1 {
+    margin: 0 0 0 0 px;
+    padding-left:  20px;
+    padding-top:  10px;
+}
+
+form{
+  padding-bottom: 10px;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__content {
+  padding-top: 0px;
+}
+
+
+.close-button{
+  float: right;
+  top:-8px;
+  right: 7px;
+}
+
+.close-icon {
+  transition: 1s ease-in-out;
+}
+
+.close-icon:hover {
+  transform: rotate(180deg);
+}
+
+::ng-deep .icon-outside .close-button{
+  float: right;
+  top:-52px;
+  right:-52px;
+}
+
+::ng-deep .icon-outside .mat-dialog-container {
+ overflow: unset
+}

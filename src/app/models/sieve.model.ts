@@ -1,6 +1,6 @@
 export interface Sieve{
   filters:string ,
   sorts:string,
-  page: number,
-  pageSize: number
+  page: number | null ,
+  pageSize: number | null
 }
