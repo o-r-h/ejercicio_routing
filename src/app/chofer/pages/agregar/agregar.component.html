@@ -42,8 +42,8 @@
           <mat-form-field appearance="fill">
             <mat-label>Tipo de Documento</mat-label>
             <mat-select formControlName="tipoDocumento">
-              <mat-option *ngFor="let tipo of tiposDocumento" [value]="tipo.value">
-                {{ tipo.viewValue }}
+              <mat-option *ngFor="let tipo of tipodocumentoList" [value]="tipo.id">
+                {{ tipo.descripcion }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -78,4 +78,5 @@
   </mat-card>
 
 </form>
+
 

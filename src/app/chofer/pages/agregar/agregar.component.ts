@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import Swal from 'sweetalert2';
+
 import { ChoferDataService } from 'src/data/chofer/chofer-data.service';
+import { ListasDataService } from './../../../../data/listas/listas-data.services';
 import { Chofer } from 'src/app/models/chofer.model';
+import { TablaIndice } from './../../../models/tablaindice.model';
+
 
 @Component({
   selector: 'chofer-agregar',
@@ -13,12 +18,22 @@ import { Chofer } from 'src/app/models/chofer.model';
 export class AgregarChoferComponent {
   userForm: FormGroup;
   submitted = false;
+  isEditMode: boolean = false;
+  itemId: number | null = null;
+
+   //dropdowns
+   tipodocumentoList: TablaIndice[]=[];
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private choferDataService: ChoferDataService
-   ) {
+    private route :ActivatedRoute,
+    private choferDataService: ChoferDataService,
+    private listasDataService: ListasDataService
+   )
+
+
+   {
     this.userForm = this.fb.group({
       nombre: ['', Validators.required],
       apellidoMaterno: ['', Validators.required],
@@ -33,25 +48,43 @@ export class AgregarChoferComponent {
 
 
   tiposDocumento = [
-    { value: 'dni', viewValue: 'DNI' },
-    { value: 'passport', viewValue: 'Pasaporte' },
-    { value: 'license', viewValue: 'Licencia' },
+    { value: '1', viewValue: 'DNI' },
+    { value: '2', viewValue: 'Pasaporte' },
+    { value: '3', viewValue: 'Licencia' },
   ];
 
 
   ngOnInit(): void {
-    // Inicialización si es necesario
+
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      this.isEditMode = !!id;
+      if (this.isEditMode) {
+        this.itemId = +id!;
+        this.getChofer(this.itemId);
+      } else {
+        this.itemId = null;
+      }
+    });
+
+    this.cargarListas();
   }
 
+  cargarListas(): void{
+    this.listasDataService.getChoferTipoDocumento().subscribe(
+      data=>{this.tipodocumentoList = data},
+      error=>{console.error("error llenar lista",error);})
+  }
 
   // Submit Registration Form
   onSubmit() {
-    this.submitted = true;
+
     if (!this.userForm.valid) {
       alert('Por favor llene todos los campos requeridos')
       return false;
     } else {
       console.log(this.userForm.value)
+      this.saveChofer();
       return true;
     }
   }
@@ -63,29 +96,66 @@ export class AgregarChoferComponent {
 
 // Método para manejar la creación o actualización
 saveChofer(): void {
-  if (this.userForm.valid) {
+  //if (this.userForm.valid) {
+
     const chofer: Chofer = this.userForm.value;
-    if (chofer.id) {
-      this.choferDataService.update(chofer).subscribe(
-        response => {
-          console.log('Chofer actualizado', response);
-        },
-        error => {
-          console.error('Error actualizando chofer', error);
-        }
+
+    if (this.isEditMode) {
+      chofer.id = this.itemId !==null ? this.itemId:0;
+       this.choferDataService.update( (this.itemId !==null ? this.itemId:0) ,chofer).subscribe(
+         response => {
+           this.showUpdate();
+         },
+         error => {
+          Swal.fire({
+            icon: "error",
+            title: "Error actualizando registro",
+            text:  error,
+            footer: '<a href="#">Contacte a soporte para mayor informacion</a>'
+          });
+         }
       );
     } else {
+
       this.choferDataService.insert(chofer).subscribe(
         response => {
-          console.log('Chofer agregado exitosamente', response);
+          this.showInsert();
         },
         error => {
-          console.error('Error agregando chofer', error);
+          console.error('Error agregando registro', error);
+          Swal.fire({
+            icon: "error",
+            title: "Error agregando registro",
+            text:  error,
+            footer: '<a href="#">Contacte a soporte para mayor informacion</a>'
+          });
+
         }
       );
     }
-  }
+
 }
+
+showUpdate() {
+  Swal.fire({
+    title: 'Informacion!',
+    text: 'Se actualizo el registro',
+    icon: 'success',
+    confirmButtonText: 'OK'
+  });
+  this.onBack();
+}
+
+showInsert() {
+  Swal.fire({
+    title: 'Informacion!',
+    text: 'Se agrego el registro',
+    icon: 'success',
+    confirmButtonText: 'OK'
+  });
+  this.onBack();
+}
+
 
 
 // Método para manejar la eliminación

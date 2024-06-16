@@ -9,7 +9,7 @@ import { Chofer } from 'src/app/models/chofer.model';
 
 
 
-var urlGet: string = environment.apiUrl.concat("chofer/get");
+var urlGet: string = environment.apiUrl.concat("chofer");
 var urlGetAll: string = environment.apiUrl.concat("chofer/getall");
 var urlCreate: string = environment.apiUrl.concat("chofer/create");
 var urlDelete: string = environment.apiUrl.concat("chofer/delete");
@@ -42,8 +42,8 @@ export class ChoferDataService {
       .pipe(catchError(this.handleError));
   }
 
-  update(chofer: Chofer): Observable<Chofer> {
-    return this.http.put<Chofer>(`${urlUpdate}/${chofer.id}`, chofer)
+  update(id:number,chofer: Chofer): Observable<Chofer> {
+    return this.http.put<Chofer>(`${urlUpdate}/${id}`, chofer)
       .pipe(catchError(this.handleError));
   }
 
@@ -62,10 +62,10 @@ export class ChoferDataService {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred.
-      errorMessage = `Ocurrio un error: ${error.error.message}`;
+      errorMessage = `Ocurrio un error: ${error.message}`;
     } else {
       // The backend returned an unsuccessful response code.
-      errorMessage = `Servidor retorno: ${error.status}, mensaje de error es: ${error.message}`;
+      errorMessage = `Servidor retorno: ${error.status}\nMessage: ${error.error.message}`;;
     }
     console.error(errorMessage);
     return throwError(() => errorMessage);
