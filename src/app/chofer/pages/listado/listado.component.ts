@@ -1,7 +1,3 @@
-
-
-
-
 import { Component ,OnInit, ViewChild  } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -26,8 +22,8 @@ import { VistasPaginacionDataService } from '../../../../data/vistaspaginacion/v
 //dialogos y utilidades
 import { UtilsService } from 'src/app/helpers/utils.service';
 import { ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
-
-
+import { ExcelExportService } from  '../../../../data/exports/excel-export.service' ;
+import { EXCEL_EXPORTNAME} from  '../../../../data/constants/constants.module';
 
 @Component({
   selector: 'chofer-listado',
@@ -49,6 +45,7 @@ export class ListadoChoferComponent  implements OnInit{
   dataSource = new MatTableDataSource<ChoferVistaPaginacion>();
 
   choferes: Chofer[] = [];
+  choferesExport:Chofer[] = [];
 
   totalItems: number = 0;
 
@@ -100,7 +97,8 @@ export class ListadoChoferComponent  implements OnInit{
     public dialog: MatDialog,
     private choferDataService: ChoferDataService,
     private listasDataService: ListasDataService,
-    private vistasPaginacionDataService: VistasPaginacionDataService
+    private vistasPaginacionDataService: VistasPaginacionDataService,
+    private excelExportService: ExcelExportService
     ) {
 
 
@@ -171,7 +169,7 @@ export class ListadoChoferComponent  implements OnInit{
     this.vistasPaginacionDataService.GetChoferPagination (this.sieveTotal).subscribe(
       (data: Chofer[]) => {
         this.totalItems = data.length;
-
+        this.choferesExport = data;
 
       },
       error => {
@@ -192,35 +190,13 @@ export class ListadoChoferComponent  implements OnInit{
     );
   }
 
-
-  // getTotalRegistrosChoferes(): void {
-  //   this.sieveTotal = this.sieve;
-  //   this.sieveTotal.page = null;
-  //   this.sieveTotal.pageSize = null;
-
-  //   this.choferDataService.getFilteredData(this.sieveTotal).subscribe(
-  //     (data: Chofer[]) => {
-  //       this.totalItems = data.length;
+  exportDataToExcel(): void {
+    const currentDate = new Date();
+    let fechaReporte   = currentDate.getDate() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+    this.excelExportService.exportToExcel(this.choferesExport, EXCEL_EXPORTNAME.replace("{1}","Chofer").replace("{2}",fechaReporte) );
+  }
 
 
-  //     },
-  //     error => {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   );
-  // }
-
-  // getFilteredChoferes(): void {
-
-  //   this.choferDataService.getFilteredData(this.sieve).subscribe(
-  //     (data: Chofer[]) => {
-  //       this.choferes = data;
-  //     },
-  //     error => {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   );
-  // }
 
 
 

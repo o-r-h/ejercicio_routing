@@ -30,7 +30,8 @@
       </div>
     </mat-card-content>
     <mat-card-actions style="display: flex; justify-content: flex-end; gap: 16px;">
-      <p class="fitro-mensaje">F2 limpiar filtros</p>
+      <p class="fitro-mensaje"> <img class="img-export-excel" src="../../../../assets/img/exportar-excel-24.png" (click)="exportDataToExcel()" > F2 limpiar filtros   </p>
+
       <button mat-raised-button color="accent" type="button"  (click)="navigateToAgregar()"  >Agregar</button>
       <button mat-raised-button color="primary" type="submit"   >Filtrar</button>
       <button mat-raised-button color="secondary" type="button" >Regresar</button>

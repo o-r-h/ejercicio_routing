@@ -62,10 +62,10 @@ export class ChoferDataService {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred.
-      errorMessage = `Ocurrio un error: ${error.error.message}`;
+      errorMessage = `Ocurrio un error: ${error.message}`;
     } else {
       // The backend returned an unsuccessful response code.
-      errorMessage = `Servidor retorno: ${error.status}, mensaje de error es: ${error.message}`;
+      errorMessage = `Servidor retorno: ${error.status}\nMessage: ${error.error.message}`;;
     }
     console.error(errorMessage);
     return throwError(() => errorMessage);

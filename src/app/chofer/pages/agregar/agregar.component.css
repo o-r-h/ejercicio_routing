@@ -39,6 +39,8 @@ body {
   flex-direction: column;
 }
 
+
+
 @media (max-width: 1024px) {
   .grid-container {
     grid-template-columns: repeat(2, 1fr);

@@ -101,24 +101,35 @@ saveChofer(): void {
     const chofer: Chofer = this.userForm.value;
 
     if (this.isEditMode) {
-      console.log(111111);
       chofer.id = this.itemId !==null ? this.itemId:0;
        this.choferDataService.update( (this.itemId !==null ? this.itemId:0) ,chofer).subscribe(
          response => {
            this.showUpdate();
          },
          error => {
-           console.error('Error actualizando chofer', error);
+          Swal.fire({
+            icon: "error",
+            title: "Error actualizando registro",
+            text:  error,
+            footer: '<a href="#">Contacte a soporte para mayor informacion</a>'
+          });
          }
       );
     } else {
-      console.log(22222);
+
       this.choferDataService.insert(chofer).subscribe(
         response => {
           this.showInsert();
         },
         error => {
-          console.error('Error agregando chofer', error);
+          console.error('Error agregando registro', error);
+          Swal.fire({
+            icon: "error",
+            title: "Error agregando registro",
+            text:  error,
+            footer: '<a href="#">Contacte a soporte para mayor informacion</a>'
+          });
+
         }
       );
     }
@@ -132,6 +143,7 @@ showUpdate() {
     icon: 'success',
     confirmButtonText: 'OK'
   });
+  this.onBack();
 }
 
 showInsert() {
@@ -141,6 +153,7 @@ showInsert() {
     icon: 'success',
     confirmButtonText: 'OK'
   });
+  this.onBack();
 }
 
 
