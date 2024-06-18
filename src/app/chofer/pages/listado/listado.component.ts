@@ -78,6 +78,10 @@ export class ListadoChoferComponent  implements OnInit{
   handleKeyboardEvent(event: KeyboardEvent) {
     if(event.key === 'F2'){
       this.filterForm.reset();
+      this.filterForm.get('nombre')?.patchValue('');
+      this.filterForm.get('apellidoPaterno')?.patchValue('');
+      this.filterForm.get('tipoDocumento')?.patchValue('');
+      this.filterForm.get('numeroDocumento')?.patchValue('');
       // Call Function
     }
   }

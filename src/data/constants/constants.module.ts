@@ -5,6 +5,7 @@ export const MY_UPDATE_DIALOG = '¿DESEA MODIFICAR EL REGISTRO {1}?';
 
 
 export const EXCEL_EXPORTNAME = 'pick-and-go {1} {2}';
+export const TIPO_TRANSPORTE = ['TRACTOR','CARRETA'];
 
 
 @NgModule({
