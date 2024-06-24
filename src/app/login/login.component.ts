@@ -15,12 +15,12 @@ export class LoginComponent {
 
   login() {
     // Simulación de autenticación
-   // if (this.username === 'user' && this.password === 'password') {
+    // if (this.username === 'user' && this.password === 'password') {
       localStorage.setItem('token', 'fake-jwt-token');
      this.router.navigate(['/home']);
-    //} else {
+    // } else {
     //  alert('Credenciales incorrectas');
-    //}
+    // }
   }
 }
 

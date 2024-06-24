@@ -17,8 +17,12 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 
-
+// MatDateFnsModule, MatLuxonDateModule, MatMomentDateModule}
 
 
 @NgModule({
@@ -40,6 +44,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatToolbarModule,
     MatTableModule,
     MatPaginatorModule,
+    MatBadgeModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+
+
 
   ]
 })
