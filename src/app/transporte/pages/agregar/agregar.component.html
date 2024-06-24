@@ -1,0 +1,72 @@
+<app-navbar></app-navbar>
+<form class="pa2" [formGroup]="userForm" (ngSubmit)="onSubmit()" >
+  <mat-card class="transporte-card card" >
+    <mat-card-header>
+      <mat-card-title><h1>Transporte<small>Mantenimiento</small></h1></mat-card-title>
+
+    </mat-card-header>
+    <mat-card-content>
+      <div class="grid-container">
+        <div class="form-group">
+
+          <mat-form-field appearance="fill">
+
+            <mat-label>Placa</mat-label>
+            <input matInput formControlName="placa" />
+            <mat-error *ngIf="userForm.get('placa')?.hasError('required')">
+              Este campo es requerido
+            </mat-error>
+
+          </mat-form-field>
+
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Registro MTC</mat-label>
+            <input matInput formControlName="registroMTC" />
+            <mat-error *ngIf="userForm.get('registroMTC')?.hasError('required')">
+              Este campo es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Ficha Inscripcion</mat-label>
+            <input matInput formControlName="fichaInscripcion" />
+            <mat-error *ngIf="userForm.get('fichaInscripcion')?.hasError('required')">
+              Este campo es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Marca</mat-label>
+            <input matInput formControlName="marca" />
+            <mat-error *ngIf="userForm.get('marca')?.hasError('required')">
+              Este campo es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="tipo">
+              <mat-option *ngFor="let tipo of tipodocumentoList" [value]="tipo.id">
+                {{ tipo.descripcion }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+      </div>
+    </mat-card-content>
+    <mat-card-actions style="display: flex; justify-content: flex-end; gap: 16px;">
+      <button mat-raised-button color="primary" type="submit">Guardar</button>
+      <button mat-raised-button color="secondary" type="button" (click)="onBack()">Regresar</button>
+    </mat-card-actions>
+  </mat-card>
+
+</form>
+
+
