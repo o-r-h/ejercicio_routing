@@ -1,0 +1,110 @@
+<!-- <form [formGroup]="mainForm">
+  <label for="nombre">Nombre:</label>
+  <input id="nombre" formControlName="nombre" type="text" readonly>
+  <button type="button" (click)="openModal()">Seleccionar Nombre</button>
+</form> -->
+
+<form class="pa2" [formGroup]="mainForm">
+  <mat-card class="transporte-card card">
+    <mat-card-header>
+      <mat-card-title
+        ><h1>Pruebas<small>-varias</small></h1></mat-card-title
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <div class="grid-container">
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Placa</mat-label>
+            <input matInput formControlName="placa" (click)="openModal()" />
+          </mat-form-field>
+        </div>
+
+        <!-- <div class="form-group">
+          <mat-form-field class="example-full-width">
+            <input
+              type="text"
+              placeholder="Buscar chofer"
+              matInput
+              [formControl]="stateCtrl"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              [panelWidth]="600"
+              [displayWith]="displayFn"
+            >
+              <mat-option
+                *ngFor="let option of filteredOptions | async"
+                [value]="option"
+                (onSelectionChange)="optionSelected(option)"
+              >
+                {{ option.campofull }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div> -->
+        <div class="form-group">
+          <mat-form-field class="example-full-width">
+            <input
+              type="text"
+              placeholder="Buscar chofer3"
+              matInput
+              [formControl]="stateCtrl"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option
+                *ngFor="let option of filteredOptions | async"
+                [value]="option.nombre"
+                (onSelectionChange)="optionSelected(option)"
+              >
+                <span>{{option.nombre}}</span
+                ><br /><small style="color:darkgray" >{{option.campofull}}}}</small>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</form>
+
+
+<div class="card-container">
+  <mat-card *ngFor="let item of paginatedItems" appearance="outlined">
+    <mat-card-header>
+      <div class="grid-container">
+      </div>
+      <!-- <mat-card-title>Cliente: TOYOTA DEL PERU   Consesionario: Jr de los girasoles Almacen #4522 {{ item.title }}</mat-card-title>
+      <mat-card-subtitle>{{ item.subtitle }}</mat-card-subtitle>  <button mat-button>Learn More</button> -->
+      <mat-card-content>
+
+      </mat-card-content>
+      <table>
+           <tr>
+            <td><span class="span-titulo-card-content">Cliente:</span>
+              TOYOTA DEL PERU
+              <span class="span-titulo-card-content">Consesionario:</span>
+               Jr de los girasoles Almacen #{{ item.title }}</td>
+            <td>
+              <button mat-icon-button color="primary">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+            </tr>
+           <tr>
+              Direccion: alfa feta  Fecha: 14/12/2024 Vin: VNFR424928239292
+           </tr>
+      </table>
+    </mat-card-header>
+
+
+
+  </mat-card>
+</div>
+<mat-paginator [length]="items.length" [pageSize]="pageSize" (page)="onPageChange($event)">
+</mat-paginator>

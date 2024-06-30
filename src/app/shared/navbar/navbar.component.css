@@ -1,3 +1,7 @@
 .navbar-custom {
   background-color: rgba(103, 46, 143, 1);
 }
+
+.example-button-container{
+ padding-left: 15px;
+}

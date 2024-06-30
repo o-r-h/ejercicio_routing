@@ -1,0 +1,564 @@
+import { ChangeDetectionStrategy, Component,ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AutocompleteDataService } from 'src/data/autocomplete/autocomplete-data.service';
+
+import { Autocomplete } from 'src/app/models/autocomplete.model';
+import { Sieve } from 'src/app/models/sieve.model';
+import { debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import Swal from 'sweetalert2';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { GuiaTransportistaDataService } from 'src/data/guiatransportista/guiatransportista-data.service';
+import { GuiaTransportista } from 'src/app/models/guiatransportista.model';
+
+@Component({
+  selector: 'guiatransportista-agregar',
+  templateUrl: './agregar.component.html',
+  styleUrls: ['./agregar.component.css'],
+
+})
+
+
+
+export class AgregarGuiaTransportistaComponent {
+  @ViewChild(MatAutocompleteTrigger) _auto: MatAutocompleteTrigger | undefined;
+  genForm: FormGroup;
+  submitted = false;
+  isEditMode: boolean = false;
+  itemId: number | null = null;
+
+
+
+  //autocomplete
+  stateCtrlCliente = new FormControl();
+  listaEntidadCliente: Autocomplete[] = [];
+  filteredOptionsCliente: Observable<Autocomplete[]> | undefined;
+
+  stateCtrlConcesionario = new FormControl();
+  listaEntidadConcesionario: Autocomplete[] = [];
+  filteredOptionsConcesionario: Observable<Autocomplete[]> | undefined;
+
+  stateCtrlChofer = this.fb.control<Autocomplete | null>(null, Validators.required);// new FormControl();
+  listaChofer: Autocomplete[] = [];
+  filteredOptionsChofer: Observable<Autocomplete[]> | undefined;
+
+  stateCtrlTractor = new FormControl();
+  listaTractor: Autocomplete[] = [];
+  filteredOptionsTractor: Observable<Autocomplete[]> | undefined;
+
+  stateCtrlCarreta = new FormControl();
+  listaCarreta: Autocomplete[] = [];
+  filteredOptionsCarreta: Observable<Autocomplete[]> | undefined;
+
+  stateCtrlUbigeoOrigen = new FormControl();
+  listaUbigeoOrigen: Autocomplete[] = [];
+  filteredOptionsUbigeoOrigen: Observable<Autocomplete[]> | undefined;
+
+  stateCtrlUbigeoDestino = new FormControl();
+  listaUbigeoDestino: Autocomplete[] = [];
+  filteredOptionsUbigeoDestino: Observable<Autocomplete[]> | undefined;
+  //fin autocomplete
+
+  //temporales para los autocomplete
+  idEntidadConcesionarioTemp: number =0;
+  idEntidadclienteTemp: number =0;
+  idChoferTemp: number=0;
+  idTractorTemp: number=0;
+  idCarretaTemp: number= 0;
+  idUbigeoDestinoTemp: number=0;
+  idUbigeoOrigenTemp: number=0;
+
+
+  //logica para autocomplete dinamico
+  // autocompleteControl = new FormControl();
+  //filteredOptions: Autocomplete[] = [];
+
+
+
+  sieveEntidad: Sieve = { filters: '', pageSize: null, page: null, sorts: '' };
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private guiaTransportistaDataService: GuiaTransportistaDataService,
+    private autocompleteService: AutocompleteDataService,
+
+
+  ) {
+    this.genForm = this.fb.group({
+      serie: ['', [Validators.required, Validators.max(99999999999)]],
+      numero: ['', [Validators.required, Validators.max(99999999999)]],
+      idEntidadCliente: ['', [Validators.required, Validators.max(99999999999)]],
+      //razonSocial: string;
+      idEntidadConcesionario: ['', [Validators.required, Validators.max(99999999999)]],
+      fecha: ['', Validators.required],
+      fechaTraslado: ['', Validators.required],
+      idUbigeoOrigen: ['', [Validators.required, Validators.max(99999999999)]],
+      //ubigeoOrigen: string;
+      idUbigeoDestino: ['', [Validators.required, Validators.max(99999999999)]],
+      //ubigeoDestino: string;
+      direccionOrigen: ['', Validators.required],
+      direccionDestino: ['', Validators.required],
+      idChofer: this.stateCtrlChofer,
+      //chofer: string;
+      //datosChofer: string;
+      idTransporteTractor: ['', [Validators.required, Validators.max(99999999999)]],
+      //transporteTractor: string;
+      idTransporteCarreta: ['', [Validators.required, Validators.max(99999999999)]],
+      //transporteCarreta: string;
+      peso: ['', Validators.required]
+    });
+  }
+
+
+  ngOnInit() {
+    console.log("oninit()");
+    this.llenarClienteAutocomplete();
+    this.llenarConcesionarioAutocomplete();
+    this.llenarCarretaAutocomplete();
+    this.llenarChoferAutocomplete();
+    this.llenarTractorAutocomplete();
+    this.llenarUbigeoOrigenAutocomplete();
+    this.llenarUbigeoDestinoAutocomplete();
+
+  //  this.sieveEntidad.filters = "valorAgrupado@=*''";
+    this.filteredOptionsCliente = this.stateCtrlCliente.valueChanges.pipe(
+      debounceTime(150),
+      startWith(''),
+      map((value) => this._filterStatesCliente(value))
+    );
+
+   // this.sieveEntidad.filters = "valorAgrupado@=*''";
+    this.filteredOptionsConcesionario = this.stateCtrlConcesionario.valueChanges.pipe(
+      debounceTime(150),
+      startWith(''),
+      map((value) => this._filterStatesConcesionario(value))
+    );
+
+  //  this.sieveEntidad.filters = "valorAgrupado@=*''";
+    this.filteredOptionsCarreta = this.stateCtrlCarreta.valueChanges.pipe(
+      debounceTime(150),
+      startWith(''),
+      map((value) => this._filterStatesCarreta(value))
+    );
+
+ //   this.sieveEntidad.filters = "valorAgrupado@=*''";
+    this.filteredOptionsTractor = this.stateCtrlTractor.valueChanges.pipe(
+      debounceTime(150),
+      startWith(''),
+      map((value) => this._filterStatesTractor(value))
+    );
+
+   // this.sieveEntidad.filters = "valorAgrupado@=*''";
+
+
+
+    // this.filteredOptionsChofer = this.stateCtrlChofer.valueChanges.pipe(
+    //   debounceTime(150),
+    //   startWith(''),
+    //   map((value) => this._filterStatesChofer(value| Autocomplete| null))
+    // );
+
+ //   this.sieveEntidad.filters = "valorAgrupado@=*''";
+    this.filteredOptionsUbigeoOrigen = this.stateCtrlUbigeoOrigen.valueChanges.pipe(
+      debounceTime(150),
+      startWith(''),
+      map((value) => this._filterStatesUbigeoOrigen(value))
+    );
+
+ //   this.sieveEntidad.filters = "valorAgrupado@=*''";
+    this.filteredOptionsUbigeoDestino = this.stateCtrlUbigeoDestino.valueChanges.pipe(
+      debounceTime(150),
+      startWith(''),
+      map((value) => this._filterStatesUbigeoDestino(value))
+    );
+
+    //logica para autocomplete dinamico
+    // this.autocompleteControl.valueChanges
+    //   .pipe(
+    //     debounceTime(50), // Espera 200ms después de que el usuario deja de escribir
+    //     distinctUntilChanged(), // Solo emite si el valor es diferente del anterior
+    //     switchMap(value => this.autocompleteService.getAllEntidades(this.setFilterEntidad(value)))
+    //   )
+    //   .subscribe(data => {
+    //     this.filteredOptions = data;
+    //   });
+
+    this.filteredOptionsChofer = this.stateCtrlChofer.valueChanges.pipe(
+      debounceTime(150),
+      startWith(''),
+      map(value => this._filterStatesChofer(value))
+    );
+
+  }
+
+  private _filterStatesChofer(value: string | Autocomplete | null): Autocomplete[] {
+    const filterValue = (typeof value === 'string' ? value : value?.valorMostrar || '').toLowerCase();
+    return this.listaChofer.filter(option => option.valorMostrar.toLowerCase().includes(filterValue));
+  }
+
+
+  //filtros autocomplete
+  private _filterStatesCliente(value: string): Autocomplete[] {
+    const filterValue = value;
+   // console.log("filter cliente", value);
+    return this.listaEntidadCliente.filter((option) =>
+      option.valorAgrupado.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private _filterStatesConcesionario(value: string): Autocomplete[] {
+    const filterValue = value;
+   // console.log("fc",filterValue);
+    return this.listaEntidadConcesionario.filter((option) =>
+      option.valorAgrupado.toLowerCase().includes(filterValue)
+
+    );
+  }
+
+  private _filterStatesCarreta(value: string): Autocomplete[] {
+    const filterValue = value;
+   // console.log("filter carreta", value);
+    return this.listaCarreta.filter((option) =>
+      option.valorAgrupado.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private _filterStatesTractor(value: string): Autocomplete[] {
+    const filterValue = value;
+   // console.log("filter tractor", value);
+    return this.listaTractor.filter((option) =>
+      option.valorAgrupado.toLowerCase().includes(filterValue)
+    );
+  }
+
+  // private _filterStatesChofer(value: string): Autocomplete[] {
+  //   const filterValue = value;
+  //  // console.log("filter Chofer", value);
+  //   return this.listaChofer.filter((option) =>
+  //     option.valorAgrupado.toLowerCase().includes(filterValue)
+  //   );
+  // }
+
+  private _filterStatesUbigeoOrigen(value: string): Autocomplete[] {
+    const filterValue = value;
+    //console.log("filter Ubigeo", value);
+    return this.listaUbigeoOrigen.filter((option) =>
+      option.valorAgrupado.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private _filterStatesUbigeoDestino(value: string): Autocomplete[] {
+    const filterValue = value;
+   // console.log("filter Ubigeo", value);
+    return this.listaUbigeoOrigen.filter((option) =>
+      option.valorAgrupado.toLowerCase().includes(filterValue)
+    );
+  }
+//fin filtros autocomplete
+
+//display autocomplete ver el valormostrar en el input
+  displayFnCliente(option: Autocomplete): string {
+    return option ? option.valorMostrar : '';
+  }
+  displayFnConcesionario(option: Autocomplete): string {
+    return option ? option.valorMostrar : '';
+  }
+
+  displayFnChofer(option: Autocomplete): string {
+    console.log("displayFnChofer", option.valorMostrar);
+    return option ? option.valorMostrar : '';
+  }
+
+  displayFnTractor(option: Autocomplete): string {
+    return option ? option.valorMostrar : '';
+  }
+  displayFnCarreta(option: Autocomplete): string {
+    return option ? option.valorMostrar : '';
+  }
+
+  displayFnUbigeoOrigen(option: Autocomplete): string {
+    return option ? option.valorMostrar : '';
+  }
+
+  displayFnUbigeoDestino(option: Autocomplete): string {
+    return option ? option.valorMostrar : '';
+  }
+//fin display autocomplete
+
+//option selected para asignar los valores temporales
+  optionSelectedCliente(option: Autocomplete) {
+    if (option) {
+      this.idEntidadclienteTemp = option.id;
+    }
+  }
+
+  optionSelectedConcesionario(option: Autocomplete) {
+    if (option) {
+      this.idEntidadConcesionarioTemp = option.id;
+    }
+  }
+  optionSelectedChofer(option: Autocomplete) {
+    this.stateCtrlChofer.setValue(option);
+    // if (option) {
+    //   this.idChoferTemp = option.id;
+    // }
+  }
+
+
+
+  optionSelectedTractor(option: Autocomplete) {
+    if (option) {
+      this.idTractorTemp = option.id;
+    }
+  }
+  optionSelectedCarreta(option: Autocomplete) {
+    if (option) {
+      this.idCarretaTemp = option.id;
+    }
+  }
+
+  optionSelectedUbigeoDestino(option: Autocomplete) {
+    if (option) {
+      this.idUbigeoDestinoTemp = option.id;
+    }
+  }
+
+  optionSelectedUbigeoOrigen(option: Autocomplete) {
+    if (option) {
+      this.idUbigeoOrigenTemp = option.id;
+    }
+  }
+
+
+  //llenar autocompletes
+  llenarClienteAutocomplete() {
+    this.autocompleteService.getAllEntidades(this.sieveEntidad).subscribe(
+      (data: Autocomplete[]) => {
+        this.listaEntidadCliente = data;
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+
+  llenarConcesionarioAutocomplete() {
+    this.autocompleteService.getAllEntidades(this.sieveEntidad).subscribe(
+      (data: Autocomplete[]) => {
+        this.listaEntidadConcesionario = data;
+
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+
+  llenarChoferAutocomplete() {
+    this.autocompleteService.getAllChoferes(this.sieveEntidad).subscribe(
+      (data: Autocomplete[]) => {
+        this.listaChofer = data;
+      //  console.log(this.listaChofer);
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+
+  llenarTractorAutocomplete() {
+    this.autocompleteService.getAllTractor(this.sieveEntidad).subscribe(
+      (data: Autocomplete[]) => {
+        this.listaTractor = data;
+
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+
+  llenarCarretaAutocomplete() {
+    this.autocompleteService.getAllCarreta(this.sieveEntidad).subscribe(
+      (data: Autocomplete[]) => {
+        this.listaCarreta = data;
+
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+
+  llenarUbigeoOrigenAutocomplete() {
+    this.autocompleteService.getAllUbigeo(this.sieveEntidad).subscribe(
+      (data: Autocomplete[]) => {
+        this.listaUbigeoOrigen = data;
+
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+
+  llenarUbigeoDestinoAutocomplete() {
+    this.autocompleteService.getAllUbigeo(this.sieveEntidad).subscribe(
+      (data: Autocomplete[]) => {
+        this.listaUbigeoDestino= data;
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  //fin llenar autocompletes
+
+  saveGuiaTransportista(): void {
+    //if (this.userForm.valid) {
+
+      const guiaTransP: GuiaTransportista = this.genForm.value;
+
+      if (this.isEditMode) {
+        guiaTransP.id = this.itemId !==null ? this.itemId:0;
+         this.guiaTransportistaDataService.update( (this.itemId !==null ? this.itemId:0) ,guiaTransP).subscribe(
+           response => {
+             this.showUpdate();
+           },
+           error => {
+            Swal.fire({
+              icon: "error",
+              title: "Error actualizando registro",
+              text:  error,
+              footer: '<a href="#">Contacte a soporte para mayor informacion</a>'
+            });
+           }
+        );
+      } else {
+
+        this.guiaTransportistaDataService.insert(guiaTransP).subscribe(
+          response => {
+            this.showInsert();
+          },
+          error => {
+            console.error('Error agregando registro', error);
+            Swal.fire({
+              icon: "error",
+              title: "Error agregando registro",
+              text:  error,
+              footer: '<a href="#">Contacte a soporte para mayor informacion</a>'
+            });
+
+          }
+        );
+      }
+
+  }
+
+  showUpdate() {
+    Swal.fire({
+      title: 'Informacion!',
+      text: 'Se actualizo el registro',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    });
+    this.onBack();
+  }
+
+  showInsert() {
+    Swal.fire({
+      title: 'Informacion!',
+      text: 'Se agrego el registro',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    });
+    this.onBack();
+  }
+
+
+
+
+  //  setFilterEntidad(valor:string){
+  //   this.sieveEntidad.filters = "valorAgrupado@=*" + valor;
+  //   return this.sieveEntidad;
+  //  }
+
+  // selectOption(option: Autocomplete) {
+  //   this.autocompleteControl.setValue(option.valorMostrar);
+  //   this.filteredOptions = [];
+  // }
+
+  // Botones formulario
+  onSubmit() {
+
+    // console.log("cli", this.genForm.get('idEntidadCliente')!.value);
+    // console.log("con", this.genForm.get('idEntidadConcesionario')!.value);
+
+    console.log('idEntidadConcesionario', this.idEntidadConcesionarioTemp);
+    console.log('idEntidadcliente',this.idEntidadclienteTemp);
+    console.log('idTransporteCarreta'       ,this.idCarretaTemp);
+    console.log('idTransporteTractor'       ,this.idTractorTemp);
+    console.log('idUbigeoDestino' ,this.idUbigeoDestinoTemp);
+    console.log('idUbigeoOrigen'  ,this.idUbigeoOrigenTemp);
+    console.log('idChofer'        ,this.idChoferTemp);
+    console.log('peso'            ,0);
+    console.log('fecha'           ,this.genForm.get('fechaTraslado')!.value);
+
+
+
+    this.genForm.get('idEntidadConcesionario')?.setValue(this.idEntidadConcesionarioTemp);
+    this.genForm.get('idEntidadCliente')?.setValue(this.idEntidadclienteTemp);
+    this.genForm.get('idTransporteCarreta')?.setValue(this.idCarretaTemp);
+    this.genForm.get('idTransporteTractor')?.setValue(this.idTractorTemp);
+    this.genForm.get('idUbigeoDestino')?.setValue(this.idUbigeoDestinoTemp);
+    this.genForm.get('idUbigeoOrigen')?.setValue(this.idUbigeoOrigenTemp);
+    this.genForm.get('idChofer')?.setValue(this.idChoferTemp);
+    this.genForm.get('peso')?.setValue(0);
+    this.genForm.get('fecha')?.setValue('2024-06-01');
+
+    console.log('formgroup' ,this.genForm);
+
+
+    if ( this.idEntidadConcesionarioTemp === this.idEntidadclienteTemp){
+      Swal.fire(
+        'Información!',
+        'Cliente y Concesionario no pueden ser iguales.',
+        'warning'
+      );
+     // return false;
+    }
+    //console.log(this.genForm);
+    if (!this.genForm.valid) {
+      //alert('Por favor llene todos los campos requeridos')
+     // return false;
+    } else {
+    //  console.log(this.genForm.value)
+      this.saveGuiaTransportista();
+      //return true;
+    }
+
+    console.log('formgroup2' ,this.genForm);
+  }
+
+ parallenarlosSelectEnEdicion(){
+  const selectedOption = this.listaEntidadCliente.find(option => option.id = 1612);
+  if (selectedOption) {
+    this.stateCtrlCliente.setValue(selectedOption);
+  }
+ }
+
+
+
+
+  onBack() {
+
+    //this.stateCtrlCliente.setValue(1612);
+    //this._filterStatesConcesionarioEdicion(1612);
+    // Lógica para el botón de regresar
+    //this.router.navigate(['guiatransportista/listado']);
+  }
+
+}

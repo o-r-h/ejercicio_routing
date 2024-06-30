@@ -12,6 +12,11 @@ export const routes: Routes =[
   path: 'agregar',
   component: AgregarChoferComponent
 },
+
+{
+  path: 'agregar/:id',
+  component: AgregarChoferComponent
+},
 {
   path: 'listado',
   component: ListadoChoferComponent

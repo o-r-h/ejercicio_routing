@@ -14,7 +14,7 @@
             <mat-label>Nombre</mat-label>
             <input matInput formControlName="nombre" />
             <mat-error *ngIf="userForm.get('nombre')?.hasError('required')">
-              This field is required
+              Este campo es requerido
             </mat-error>
 
           </mat-form-field>
@@ -25,7 +25,7 @@
             <mat-label>Apellido Paterno</mat-label>
             <input matInput formControlName="apellidoPaterno" />
             <mat-error *ngIf="userForm.get('apellidoPaterno')?.hasError('required')">
-              This field is required
+              Este campo es requerido
             </mat-error>
           </mat-form-field>
         </div>
@@ -34,7 +34,7 @@
             <mat-label>Apellido Materno</mat-label>
             <input matInput formControlName="apellidoMaterno" />
             <mat-error *ngIf="userForm.get('apellidoMaterno')?.hasError('required')">
-              This field is required
+              Este campo es requerido
             </mat-error>
           </mat-form-field>
         </div>
@@ -42,8 +42,8 @@
           <mat-form-field appearance="fill">
             <mat-label>Tipo de Documento</mat-label>
             <mat-select formControlName="tipoDocumento">
-              <mat-option *ngFor="let tipo of tiposDocumento" [value]="tipo.value">
-                {{ tipo.viewValue }}
+              <mat-option *ngFor="let tipo of tipodocumentoList" [value]="tipo.id">
+                {{ tipo.descripcion }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -62,7 +62,7 @@
             <mat-label>Brevete</mat-label>
             <input matInput formControlName="brevete" />
             <mat-error *ngIf="userForm.get('brevete')?.hasError('required')">
-              This field is required
+              Este campo es requerido
             </mat-error>
             <mat-error *ngIf="userForm.get('brevete')?.hasError('max')">
               valor no debe ser mayor a  99999999999
@@ -78,4 +78,5 @@
   </mat-card>
 
 </form>
+
 

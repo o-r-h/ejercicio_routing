@@ -1,0 +1,136 @@
+<app-navbar></app-navbar>
+<form [formGroup]="filterFormGt" (ngSubmit)="applyFilter()">
+
+  <mat-card class="chofer-card card" style="width: 100%; margin-top: 50px;">
+
+    <mat-card-header>
+      <mat-card-title><h1>Guia Transportista<small>Listado</small></h1></mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="grid-container">
+
+        <mat-form-field>
+          <mat-label>Serie</mat-label>
+          <input   matInput formControlName ="serie" name="serie" #serieInput>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Numero</mat-label>
+          <input matInput formControlName ="numero" name="numero">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Razon Social Cliente</mat-label>
+          <input matInput formControlName ="razonSocialCliente" name="razonSocialCliente">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Razon Social Concesionario</mat-label>
+          <input matInput formControlName ="razonSocialConcesionario" name="razonSocialConcesionario">
+        </mat-form-field>
+
+         <mat-form-field>
+          <mat-label>Fecha Traslado</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fechaTraslado" />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Ubigeo Origen</mat-label>
+          <input matInput formControlName ="ubigeoOrigen" name="ubigeoOrigen" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Ubigeo Destino</mat-label>
+          <input matInput formControlName ="ubigeoDestino" name="ubigeoDestino" />
+        </mat-form-field>
+
+
+      </div>
+    </mat-card-content>
+    <mat-card-actions style="display: flex; justify-content: flex-end; gap: 16px;">
+      <p class="fitro-mensaje"> <img class="img-export-excel" src="../../../../assets/img/exportar-excel-24.png" (click)="exportDataToExcel()" > F2 limpiar filtros   </p>
+
+      <button mat-raised-button color="accent" type="button"  (click)="navigateToAgregar()"  >Agregar</button>
+      <button mat-raised-button color="primary" type="submit"   >Filtrar</button>
+      <button mat-raised-button color="secondary" type="button" >Regresar</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="guiatvw" class="mat-table">
+      <!-- Id Column -->
+      <ng-container matColumnDef="id" style="display: none !important;" >
+        <th mat-header-cell *matHeaderCellDef> # </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="serie" >
+        <th mat-header-cell *matHeaderCellDef  > serie </th>
+        <td mat-cell *matCellDef="let element" >  {{ element.serie }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="numero" >
+        <th mat-header-cell *matHeaderCellDef  > numero </th>
+        <td mat-cell *matCellDef="let element" >  {{ element.numero }} </td>
+      </ng-container>
+
+    <ng-container matColumnDef="razonSocialCliente" >
+      <th mat-header-cell *matHeaderCellDef  > Cliente </th>
+      <td mat-cell *matCellDef="let element" ><p><span style="color:darkgray">Cliente:</span>  {{ element.razonSocialCliente }}</p> <p> <span style="color:darkgray">Consesionario: </span>{{ element.razonSocialConcesionario }}</p>  </td>
+    </ng-container>
+
+
+    <!-- <ng-container matColumnDef="razonSocialConcesionario" >
+      <th mat-header-cell *matHeaderCellDef  > Concesionario </th>
+      <td mat-cell *matCellDef="let element" >  {{ element.razonSocialConcesionario }} </td>
+    </ng-container> -->
+
+
+    <ng-container matColumnDef="fechaTraslado" >
+      <th mat-header-cell *matHeaderCellDef  > fecha Traslado </th>
+      <td mat-cell *matCellDef="let element" >  {{ element.fechaTraslado | date: 'dd-MM-yyyy' }}  </td>
+    </ng-container>
+
+
+
+
+    <ng-container matColumnDef="ubigeoOrigen" >
+      <th mat-header-cell *matHeaderCellDef  > Origen -destino </th>
+      <td mat-cell *matCellDef="let element" > <p> {{ element.ubigeoOrigen }}</p> <p>{{ element.ubigeoDestino }}</p>    </td>
+    </ng-container>
+
+
+
+     <!-- Actions Column -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button color="primary" (click)="editElement(element)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteElement(element)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator [length]=" this.totalItems"
+  [pageSize]="sieveTotal.pageSize"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  (page)="onChangePage($event)">
+  <ng-template matPaginatorRangeLabel let-pageSize let-start let-end let-total>
+    {{ '...' }}
+  </ng-template>
+  </mat-paginator>
+
+</div>

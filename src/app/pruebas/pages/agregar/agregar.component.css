@@ -1,0 +1,39 @@
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+
+.mat-mdc-option {
+  border-bottom: 1px solid  #bdc3c5; /* Color and thickness of the separator */
+}
+
+.mat-option:last-child {
+  border-bottom: none; /* Remove the border from the last item */
+}
+
+
+.card-container  {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mat-mdc-card-title{
+  font-size: 14px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.span-titulo-card-content{
+  color:cadetblue;
+}

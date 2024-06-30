@@ -1,3 +1,5 @@
+
+
 <app-navbar></app-navbar>
 <form [formGroup]="filterForm" (ngSubmit)="applyFilter()">
 
@@ -12,12 +14,26 @@
           <input matInput formControlName ="nombre" name="nombre">
         </mat-form-field>
         <mat-form-field>
-          <mat-label>Apellido</mat-label>
+          <mat-label>Apellido Paterno</mat-label>
           <input matInput formControlName ="apellidoPaterno" name="apellido">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Seleccionar Item</mat-label>
+          <mat-select formControlName="tipoDocumento" name="tipoDocumento">
+            <mat-option *ngFor="let item of tipodocumentoList" [value]="item.descripcion">
+              {{ item.descripcion }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Numero Documento</mat-label>
+          <input matInput formControlName ="numeroDocumento" name="numeroDocumento">
         </mat-form-field>
       </div>
     </mat-card-content>
     <mat-card-actions style="display: flex; justify-content: flex-end; gap: 16px;">
+      <p class="fitro-mensaje"> <img class="img-export-excel" src="../../../../assets/img/exportar-excel-24.png" (click)="exportDataToExcel()" > F2 limpiar filtros   </p>
+
       <button mat-raised-button color="accent" type="button"  (click)="navigateToAgregar()"  >Agregar</button>
       <button mat-raised-button color="primary" type="submit"   >Filtrar</button>
       <button mat-raised-button color="secondary" type="button" >Regresar</button>
@@ -28,35 +44,23 @@
 </form>
 
 <div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource" class="mat-table">
+  <table mat-table [dataSource]="choferes" class="mat-table">
       <!-- Id Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> Nombre </th>
+      <ng-container matColumnDef="id" style="display: none !important;" >
+        <th mat-header-cell *matHeaderCellDef> # </th>
         <td mat-cell *matCellDef="let element"> {{element.id}} </td>
       </ng-container>
 
     <!-- Nombre Column -->
-    <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef> Nombre </th>
-      <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+    <ng-container matColumnDef="nombresyapellidos" >
+      <th mat-header-cell *matHeaderCellDef  > Nombre y Apellidos </th>
+      <td mat-cell *matCellDef="let element" >  {{ element.nombre }} {{ element.apellidoPaterno }} {{ element.apellidoMaterno }}  </td>
     </ng-container>
 
-    <!-- apellidoPaterno Column -->
-    <ng-container matColumnDef="apellidopaterno">
-      <th mat-header-cell *matHeaderCellDef> Apellido Paterno </th>
-      <td mat-cell *matCellDef="let element"> {{element.apellidoPaterno}} </td>
-    </ng-container>
 
-    <!-- apellidoPaterno Column -->
-    <ng-container matColumnDef="apellidomaterno">
-      <th mat-header-cell *matHeaderCellDef> Apellido Materno </th>
-      <td mat-cell *matCellDef="let element"> {{element.apellidoPaterno}} </td>
-    </ng-container>
-
-     <!-- tipoDocumento Column -->
-     <ng-container matColumnDef="tipoDocumento">
-      <th mat-header-cell *matHeaderCellDef> Tipo Doc. </th>
-      <td mat-cell *matCellDef="let element"> {{element.tipoDocumento}} </td>
+    <ng-container matColumnDef="descripcion">
+      <th mat-header-cell *matHeaderCellDef> Descripcion </th>
+      <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
     </ng-container> >
 
        <!-- tipoDocumento Column -->
@@ -88,5 +92,13 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  <mat-paginator [length]=" this.totalItems"
+  [pageSize]="sieveTotal.pageSize"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  (page)="onChangePage($event)">
+  <ng-template matPaginatorRangeLabel let-pageSize let-start let-end let-total>
+    {{ '...' }}
+  </ng-template>
+  </mat-paginator>
+
 </div>

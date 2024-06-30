@@ -1,0 +1,171 @@
+<app-navbar></app-navbar>
+<form class="pa2" [formGroup]="genForm" (ngSubmit)="onSubmit()">
+  <mat-card class="chofer-card card">
+    <mat-card-header>
+      <mat-card-title
+        ><h1>Guia Transportista<small>Mantenimiento</small></h1></mat-card-title
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <div class="grid-container">
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Serie</mat-label>
+            <input matInput formControlName="serie" />
+            <mat-error *ngIf="genForm.get('serie')?.hasError('required')">
+              Este campo es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Numero</mat-label>
+            <input matInput formControlName="numero" />
+            <mat-error *ngIf="genForm.get('numero')?.hasError('required')">
+              Este campo es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="grid-container2">
+        <mat-form-field>
+          <input matInput placeholder="Cliente" [matAutocomplete]="autoCliente" [formControl]="stateCtrlCliente" formControlName="idEntidadCliente" >
+          <mat-autocomplete #autoCliente="matAutocomplete" [displayWith]="displayFnCliente" (optionSelected)="optionSelectedCliente($event.option.value)"  >
+            <mat-option *ngFor="let option of filteredOptionsCliente | async" [value]="option">
+              {{ option.valorAgrupado }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Concesionario" [matAutocomplete]="autoConcesionario" [formControl]="stateCtrlConcesionario" formControlName="idEntidadConcesionario" >
+          <mat-autocomplete #autoConcesionario="matAutocomplete" [displayWith]="displayFnConcesionario" (optionSelected)="optionSelectedConcesionario($event.option.value)" >
+            <mat-option *ngFor="let option of filteredOptionsConcesionario | async" [value]="option">
+              {{ option.valorAgrupado }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+       <!-- para filtrar dinamicamente el autocomplete
+          <mat-form-field appearance="fill">
+          <mat-label>Autocompletar</mat-label>
+          <input type="text"
+                 matInput
+                 [formControl]="autocompleteControl"
+                 [matAutocomplete]="auto"
+                  >
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions" (click)="selectOption(option)">
+              {{ option.valorMostrar }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field> -->
+      </div>
+      <div class="grid-container">
+        <mat-form-field>
+          <mat-label>Fecha Traslado</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fechaTraslado" />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Tractor" [matAutocomplete]="autoTractor" [formControl]="stateCtrlTractor" formControlName="idTransporteTractor" >
+          <mat-autocomplete #autoTractor="matAutocomplete" [displayWith]="displayFnTractor" (optionSelected)="optionSelectedTractor($event.option.value)" >
+            <mat-option *ngFor="let option of filteredOptionsTractor | async" [value]="option">
+              {{ option.valorAgrupado }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Carreta" [matAutocomplete]="autoCarreta" [formControl]="stateCtrlCarreta" formControlName="idTransporteCarreta" >
+          <mat-autocomplete #autoCarreta="matAutocomplete" [displayWith]="displayFnCarreta" (optionSelected)="optionSelectedCarreta($event.option.value)" >
+            <mat-option *ngFor="let option of filteredOptionsCarreta | async" [value]="option">
+              {{ option.valorAgrupado }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+      </div>
+
+      <div class="grid-container2">
+
+        <mat-form-field>
+          <input matInput placeholder="Ubigeo Origen" [matAutocomplete]="autoUbigeoOrigen" [formControl]="stateCtrlUbigeoOrigen" formControlName="idUbigeoOrigen" >
+          <mat-autocomplete #autoUbigeoOrigen="matAutocomplete" [displayWith]="displayFnUbigeoOrigen" (optionSelected)="optionSelectedUbigeoOrigen($event.option.value)" >
+            <mat-option *ngFor="let option of filteredOptionsUbigeoOrigen| async" [value]="option">
+              {{ option.valorAgrupado }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput placeholder="Ubigeo Destino" [matAutocomplete]="autoUbigeoDestino" [formControl]="stateCtrlUbigeoDestino" formControlName="idUbigeoDestino" >
+          <mat-autocomplete #autoUbigeoDestino="matAutocomplete" [displayWith]="displayFnUbigeoDestino" (optionSelected)="optionSelectedUbigeoDestino($event.option.value)" >
+            <mat-option *ngFor="let option of filteredOptionsUbigeoDestino| async" [value]="option">
+              {{ option.valorAgrupado }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+
+
+      </div>
+      <div class="grid-container">
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Dirección Origen</mat-label>
+            <input matInput formControlName="direccionOrigen" />
+            <mat-error
+              *ngIf="genForm.get('direccionOrigen')?.hasError('required')"
+            >
+              Este campo es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field appearance="fill">
+            <mat-label>Dirección Destino</mat-label>
+            <input matInput formControlName="direccionDestino" />
+            <mat-error
+              *ngIf="genForm.get('direccionDestino')?.hasError('required')"
+            >
+              Este campo es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+
+        <mat-form-field>
+          <input matInput placeholder="Chofer" [matAutocomplete]="autoChofer" [formControl]="stateCtrlChofer" formControlName="idChofer"  required>
+          <mat-autocomplete #autoChofer="matAutocomplete" [displayWith]="displayFnChofer" (optionSelected)="optionSelectedChofer($event.option.value)" >
+            <mat-option *ngFor="let option of filteredOptionsChofer| async" [value]="option">
+              {{ option.valorAgrupado }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="stateCtrlChofer.hasError('required')">
+            Este campo es requerido.
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+    </mat-card-content>
+    <mat-card-actions
+      style="display: flex; justify-content: flex-end; gap: 16px"
+    >
+      <button mat-raised-button color="primary" type="submit">Guardar</button>
+      <button
+        mat-raised-button
+        color="secondary"
+        type="button"
+        (click)="onBack()"
+      >
+        Regresar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

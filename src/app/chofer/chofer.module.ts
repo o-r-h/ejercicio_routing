@@ -8,8 +8,8 @@ import { AgregarChoferComponent } from './pages/agregar/agregar.component';
 import { ListadoChoferComponent } from './pages/listado/listado.component';
 import { SharedModule } from '../shared/shared.module';
 import { MaterialModule } from '../material/material.module';
-
 import { ChoferRoutingModule } from './chofer-routing.module';
+
 
 @NgModule({
   imports: [
@@ -25,7 +25,8 @@ import { ChoferRoutingModule } from './chofer-routing.module';
   exports: [],
   declarations: [
     AgregarChoferComponent,
-    ListadoChoferComponent
+    ListadoChoferComponent,
+
   ],
 
 })

@@ -3,10 +3,11 @@ export interface Transporte {
   placa: string;
   registroMTC: string;
   fichaInscripcion: string;
+  marca: string;
   tipo: string;
-  createdAt: string | null;
-  createdBy: string;
-  modifiedAt: string | null;
-  modifiedBy: string;
+  // createdAt: string | null;
+  // createdBy: string;
+  // modifiedAt: string | null;
+  // modifiedBy: string;
   estado: number | null;
 }
