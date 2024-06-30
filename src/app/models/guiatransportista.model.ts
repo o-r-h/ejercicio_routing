@@ -1,6 +1,6 @@
 export interface GuiaTransportista {
     id: number;
-    serie: number;
+    serie: string;
     numero: number;
     idEntidadCliente: number;
     idEntidadConcesionario: number;
@@ -14,4 +14,8 @@ export interface GuiaTransportista {
     idTransporteTractor: number;
     idTransporteCarreta: number;
     peso: string;
+    rutaXml:string;
+    rutaPdf: string,
+    rutaCdr: string,
+    estado: number;
 }

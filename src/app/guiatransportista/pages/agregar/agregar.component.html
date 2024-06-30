@@ -31,7 +31,7 @@
       <div class="grid-container2">
         <mat-form-field>
           <input matInput placeholder="Cliente" [matAutocomplete]="autoCliente" [formControl]="stateCtrlCliente" formControlName="idEntidadCliente" >
-          <mat-autocomplete #autoCliente="matAutocomplete" [displayWith]="displayFnCliente" (optionSelected)="optionSelectedCliente($event.option.value)" >
+          <mat-autocomplete #autoCliente="matAutocomplete" [displayWith]="displayFnCliente" (optionSelected)="optionSelectedCliente($event.option.value)"  >
             <mat-option *ngFor="let option of filteredOptionsCliente | async" [value]="option">
               {{ option.valorAgrupado }}
             </mat-option>
@@ -64,7 +64,7 @@
       <div class="grid-container">
         <mat-form-field>
           <mat-label>Fecha Traslado</mat-label>
-          <input matInput [matDatepicker]="picker" />
+          <input matInput [matDatepicker]="picker" formControlName="fechaTraslado" />
           <mat-datepicker-toggle
             matIconSuffix
             [for]="picker"
@@ -141,12 +141,15 @@
 
 
         <mat-form-field>
-          <input matInput placeholder="Chofer" [matAutocomplete]="autoChofer" [formControl]="stateCtrlChofer" formControlName="idChofer" >
+          <input matInput placeholder="Chofer" [matAutocomplete]="autoChofer" [formControl]="stateCtrlChofer" formControlName="idChofer"  required>
           <mat-autocomplete #autoChofer="matAutocomplete" [displayWith]="displayFnChofer" (optionSelected)="optionSelectedChofer($event.option.value)" >
             <mat-option *ngFor="let option of filteredOptionsChofer| async" [value]="option">
               {{ option.valorAgrupado }}
             </mat-option>
           </mat-autocomplete>
+          <mat-error *ngIf="stateCtrlChofer.hasError('required')">
+            Este campo es requerido.
+          </mat-error>
         </mat-form-field>
 
       </div>
