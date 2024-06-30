@@ -5,10 +5,14 @@ import { environment } from 'src/environment/environment';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Chofer } from 'src/app/models/chofer.model';
 import { Transporte } from 'src/app/models/transporte.model';
+import { GuiaTransportista } from 'src/app/models/guiatransportista.model';
+import { GuiaTransportistaModule } from 'src/app/guiatransportista/guiatransportista.module';
+import { GuiaTransportistaPaginacion } from 'src/app/models/guiatransportista-vw-pagination.model';
 
 
 var urlChoferPagination: string = environment.apiUrl.concat("vistas/PaginationListaChofer");
 var urlTransportePagination: string = environment.apiUrl.concat("vistas/PaginationListaTransporte");
+var urlGuiaTransportistaPagination: string = environment.apiUrl.concat("vistas/PaginationListaGuiaTransportista");
 
 
 @Injectable({
@@ -32,6 +36,10 @@ export class VistasPaginacionDataService {
     .pipe(catchError(this.handleError));
  }
 
+ GetGuiaTransportistaPagination(sieve: Sieve): Observable<GuiaTransportistaPaginacion[]>{
+    return this.http.post<GuiaTransportistaPaginacion[]>(`${urlGuiaTransportistaPagination}`, sieve)
+  .pipe(catchError(this.handleError));
+}
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = '';

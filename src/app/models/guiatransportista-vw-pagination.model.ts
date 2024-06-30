@@ -1,10 +1,11 @@
 export interface GuiaTransportistaPaginacion {
   id: number;
-  serie: number;
+  serie: string;
   numero: number;
   idEntidadCliente: number;
-  razonSocial: string;
+  razonSocialCliente: string;
   idEntidadConcesionario: number;
+  razonSocialConcesionario: string;
   fecha: string;
   fechaTraslado: string;
   idUbigeoOrigen: number;
@@ -21,4 +22,9 @@ export interface GuiaTransportistaPaginacion {
   idTransporteCarreta: number;
   transporteCarreta: string;
   peso: string;
+  rutaXml:string;
+  rutaPdf: string,
+  rutaCdr: string,
+  estado: number;
+  estadoDescripcion: string;
 }

@@ -1,5 +1,3 @@
-
-
 import { ChangeDetectionStrategy, Component,ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -33,7 +31,7 @@ export class AgregarGuiaTransportistaComponent {
 
 
   //autocomplete
-  stateCtrlCliente = new  FormControl(null, Validators.required);
+  stateCtrlCliente = new FormControl();
   listaEntidadCliente: Autocomplete[] = [];
   filteredOptionsCliente: Observable<Autocomplete[]> | undefined;
 
@@ -41,23 +39,23 @@ export class AgregarGuiaTransportistaComponent {
   listaEntidadConcesionario: Autocomplete[] = [];
   filteredOptionsConcesionario: Observable<Autocomplete[]> | undefined;
 
-  stateCtrlChofer = new  FormControl(null, Validators.required);
+  stateCtrlChofer = this.fb.control<Autocomplete | null>(null, Validators.required);// new FormControl();
   listaChofer: Autocomplete[] = [];
-  filteredOptionsChofer!: Observable<Autocomplete[]>;
+  filteredOptionsChofer: Observable<Autocomplete[]> | undefined;
 
-  stateCtrlTractor  = new  FormControl(null, Validators.required);
+  stateCtrlTractor = new FormControl();
   listaTractor: Autocomplete[] = [];
   filteredOptionsTractor: Observable<Autocomplete[]> | undefined;
 
-  stateCtrlCarreta = new FormControl(null, Validators.required);
+  stateCtrlCarreta = new FormControl();
   listaCarreta: Autocomplete[] = [];
   filteredOptionsCarreta: Observable<Autocomplete[]> | undefined;
 
-  stateCtrlUbigeoOrigen = new FormControl(null, Validators.required);
+  stateCtrlUbigeoOrigen = new FormControl();
   listaUbigeoOrigen: Autocomplete[] = [];
   filteredOptionsUbigeoOrigen: Observable<Autocomplete[]> | undefined;
 
-  stateCtrlUbigeoDestino = new FormControl(null, Validators.required);
+  stateCtrlUbigeoDestino = new FormControl();
   listaUbigeoDestino: Autocomplete[] = [];
   filteredOptionsUbigeoDestino: Observable<Autocomplete[]> | undefined;
   //fin autocomplete
@@ -88,29 +86,27 @@ export class AgregarGuiaTransportistaComponent {
     private autocompleteService: AutocompleteDataService,
 
 
-
   ) {
     this.genForm = this.fb.group({
       serie: ['', [Validators.required, Validators.max(99999999999)]],
       numero: ['', [Validators.required, Validators.max(99999999999)]],
-      idEntidadCliente: this.stateCtrlCliente,
+      idEntidadCliente: ['', [Validators.required, Validators.max(99999999999)]],
       //razonSocial: string;
-      idEntidadConcesionario: this.stateCtrlConcesionario,
+      idEntidadConcesionario: ['', [Validators.required, Validators.max(99999999999)]],
       fecha: ['', Validators.required],
       fechaTraslado: ['', Validators.required],
-      idUbigeoOrigen: this.stateCtrlUbigeoOrigen,
+      idUbigeoOrigen: ['', [Validators.required, Validators.max(99999999999)]],
       //ubigeoOrigen: string;
-      idUbigeoDestino: this.stateCtrlUbigeoDestino,
+      idUbigeoDestino: ['', [Validators.required, Validators.max(99999999999)]],
       //ubigeoDestino: string;
       direccionOrigen: ['', Validators.required],
       direccionDestino: ['', Validators.required],
-      //idChofer: ['', Validators.required],
       idChofer: this.stateCtrlChofer,
       //chofer: string;
       //datosChofer: string;
-      idTransporteTractor: this.stateCtrlTractor,
+      idTransporteTractor: ['', [Validators.required, Validators.max(99999999999)]],
       //transporteTractor: string;
-      idTransporteCarreta: this.stateCtrlCarreta,
+      idTransporteCarreta: ['', [Validators.required, Validators.max(99999999999)]],
       //transporteCarreta: string;
       peso: ['', Validators.required]
     });
@@ -118,7 +114,7 @@ export class AgregarGuiaTransportistaComponent {
 
 
   ngOnInit() {
-
+    console.log("oninit()");
     this.llenarClienteAutocomplete();
     this.llenarConcesionarioAutocomplete();
     this.llenarCarretaAutocomplete();
@@ -131,51 +127,52 @@ export class AgregarGuiaTransportistaComponent {
     this.filteredOptionsCliente = this.stateCtrlCliente.valueChanges.pipe(
       debounceTime(150),
       startWith(''),
-      map((value) => this._filterStatesCliente(value || ''))
+      map((value) => this._filterStatesCliente(value))
     );
 
    // this.sieveEntidad.filters = "valorAgrupado@=*''";
     this.filteredOptionsConcesionario = this.stateCtrlConcesionario.valueChanges.pipe(
       debounceTime(150),
       startWith(''),
-      map((value) => this._filterStatesConcesionario(value|| ''))
+      map((value) => this._filterStatesConcesionario(value))
     );
 
   //  this.sieveEntidad.filters = "valorAgrupado@=*''";
     this.filteredOptionsCarreta = this.stateCtrlCarreta.valueChanges.pipe(
       debounceTime(150),
       startWith(''),
-      map((value) => this._filterStatesCarreta(value|| ''))
+      map((value) => this._filterStatesCarreta(value))
     );
 
  //   this.sieveEntidad.filters = "valorAgrupado@=*''";
     this.filteredOptionsTractor = this.stateCtrlTractor.valueChanges.pipe(
       debounceTime(150),
       startWith(''),
-      map((value) => this._filterStatesTractor(value|| ''))
+      map((value) => this._filterStatesTractor(value))
     );
 
    // this.sieveEntidad.filters = "valorAgrupado@=*''";
 
-   this.filteredOptionsChofer = this.stateCtrlChofer.valueChanges.pipe(
-    debounceTime(150),
-    startWith(''),
-    map(value => this._filterStatesChofer(value || ''))
-  );
 
+
+    // this.filteredOptionsChofer = this.stateCtrlChofer.valueChanges.pipe(
+    //   debounceTime(150),
+    //   startWith(''),
+    //   map((value) => this._filterStatesChofer(value| Autocomplete| null))
+    // );
 
  //   this.sieveEntidad.filters = "valorAgrupado@=*''";
     this.filteredOptionsUbigeoOrigen = this.stateCtrlUbigeoOrigen.valueChanges.pipe(
       debounceTime(150),
       startWith(''),
-      map((value) => this._filterStatesUbigeoOrigen(value|| ''))
+      map((value) => this._filterStatesUbigeoOrigen(value))
     );
 
  //   this.sieveEntidad.filters = "valorAgrupado@=*''";
     this.filteredOptionsUbigeoDestino = this.stateCtrlUbigeoDestino.valueChanges.pipe(
       debounceTime(150),
       startWith(''),
-      map((value) => this._filterStatesUbigeoDestino(value|| ''))
+      map((value) => this._filterStatesUbigeoDestino(value))
     );
 
     //logica para autocomplete dinamico
@@ -189,13 +186,18 @@ export class AgregarGuiaTransportistaComponent {
     //     this.filteredOptions = data;
     //   });
 
-
+    this.filteredOptionsChofer = this.stateCtrlChofer.valueChanges.pipe(
+      debounceTime(150),
+      startWith(''),
+      map(value => this._filterStatesChofer(value))
+    );
 
   }
 
-
-
-
+  private _filterStatesChofer(value: string | Autocomplete | null): Autocomplete[] {
+    const filterValue = (typeof value === 'string' ? value : value?.valorMostrar || '').toLowerCase();
+    return this.listaChofer.filter(option => option.valorMostrar.toLowerCase().includes(filterValue));
+  }
 
 
   //filtros autocomplete
@@ -232,7 +234,13 @@ export class AgregarGuiaTransportistaComponent {
     );
   }
 
-
+  // private _filterStatesChofer(value: string): Autocomplete[] {
+  //   const filterValue = value;
+  //  // console.log("filter Chofer", value);
+  //   return this.listaChofer.filter((option) =>
+  //     option.valorAgrupado.toLowerCase().includes(filterValue)
+  //   );
+  // }
 
   private _filterStatesUbigeoOrigen(value: string): Autocomplete[] {
     const filterValue = value;
@@ -249,14 +257,6 @@ export class AgregarGuiaTransportistaComponent {
       option.valorAgrupado.toLowerCase().includes(filterValue)
     );
   }
-
-  private _filterStatesChofer(value: string): Autocomplete[] {
-    const filterValue = value;
-   // console.log("filter cliente", value);
-    return this.listaChofer.filter((option) =>
-      option.valorAgrupado.toLowerCase().includes(filterValue)
-    );
-  }
 //fin filtros autocomplete
 
 //display autocomplete ver el valormostrar en el input
@@ -268,7 +268,7 @@ export class AgregarGuiaTransportistaComponent {
   }
 
   displayFnChofer(option: Autocomplete): string {
-    //console.log("displayFnChofer", option.valorMostrar);
+    console.log("displayFnChofer", option.valorMostrar);
     return option ? option.valorMostrar : '';
   }
 
@@ -301,10 +301,10 @@ export class AgregarGuiaTransportistaComponent {
     }
   }
   optionSelectedChofer(option: Autocomplete) {
-
-    if (option) {
-      this.idChoferTemp = option.id;
-    }
+    this.stateCtrlChofer.setValue(option);
+    // if (option) {
+    //   this.idChoferTemp = option.id;
+    // }
   }
 
 
@@ -419,31 +419,8 @@ export class AgregarGuiaTransportistaComponent {
 
   saveGuiaTransportista(): void {
     //if (this.userForm.valid) {
-      let valorIdtemp = this.itemId !==null ? this.itemId:0;
-      const guia: GuiaTransportista = {
-        id                    : valorIdtemp,
-        serie                 : this.genForm.get('serie')!.value,
-        numero                : this.genForm.get('numero')!.value,
-        idEntidadCliente      : this.retornarValor(this.genForm.get('idEntidadCliente')!.value),
-        idEntidadConcesionario: this.retornarValor(this.genForm.get('idEntidadConcesionario')!.value),
-        idTransporteCarreta   : this.retornarValor(this.genForm.get('idTransporteCarreta')!.value),
-        idChofer              : this.retornarValor(this.genForm.get('idChofer')!.value),
-        idTransporteTractor   : this.retornarValor(this.genForm.get('idTransporteTractor')!.value),
-        idUbigeoDestino       : this.retornarValor(this.genForm.get('idUbigeoDestino')!.value),
-        idUbigeoOrigen        : this.retornarValor(this.genForm.get('idUbigeoOrigen')!.value),
-        fecha                 : '1900-01-01',//this.genForm.get('fecha')!.value,
-        fechaTraslado         : this.genForm.get('fechaTraslado')!.value,
-        peso                  : '0',//this.genForm.get('peso')!.value,
-        estado                : 1,//this.genForm.get('estado')!.value,
-        direccionDestino      : this.genForm.get('direccionDestino')!.value,
-        direccionOrigen       : this.genForm.get('direccionOrigen')!.value,
-        rutaXml               : '',//this.genForm.get('rutaXml')!.value,
-        rutaPdf               : '',//this.genForm.get('rutaPdf')!.value,
-        rutaCdr               : '',//this.genForm.get('rutaCdr')!.value,
 
-      };
-
-      const guiaTransP: GuiaTransportista = guia; // this.genForm.value;
+      const guiaTransP: GuiaTransportista = this.genForm.value;
 
       if (this.isEditMode) {
         guiaTransP.id = this.itemId !==null ? this.itemId:0;
@@ -516,138 +493,72 @@ export class AgregarGuiaTransportistaComponent {
 
   // Botones formulario
   onSubmit() {
-     console.log("cli", this.genForm.get('idEntidadCliente')!.value);
-     console.log("con", this.genForm.get('idEntidadConcesionario')!.value);
 
-    //console.log('idEntidadConcesionario', this.idEntidadConcesionarioTemp);
-    //console.log('idEntidadcliente',this.idEntidadclienteTemp);
-    //console.log('idTransporteCarreta'       ,this.idCarretaTemp);
-    //console.log('idTransporteTractor'       ,this.idTractorTemp);
-    //console.log('idUbigeoDestino' ,this.idUbigeoDestinoTemp);
-    // console.log('idUbigeoOrigen'  ,this.idUbigeoOrigenTemp);
-    // console.log('idChofer'        ,this.idChoferTemp);
-    // console.log('peso'            ,0);
-    // console.log('fecha'           ,this.genForm.get('fechaTraslado')!.value);
+    // console.log("cli", this.genForm.get('idEntidadCliente')!.value);
+    // console.log("con", this.genForm.get('idEntidadConcesionario')!.value);
 
-     this.genForm.get('peso')?.setValue(0);
-     this.genForm.get('fecha')?.setValue('2024-06-01');
+    console.log('idEntidadConcesionario', this.idEntidadConcesionarioTemp);
+    console.log('idEntidadcliente',this.idEntidadclienteTemp);
+    console.log('idTransporteCarreta'       ,this.idCarretaTemp);
+    console.log('idTransporteTractor'       ,this.idTractorTemp);
+    console.log('idUbigeoDestino' ,this.idUbigeoDestinoTemp);
+    console.log('idUbigeoOrigen'  ,this.idUbigeoOrigenTemp);
+    console.log('idChofer'        ,this.idChoferTemp);
+    console.log('peso'            ,0);
+    console.log('fecha'           ,this.genForm.get('fechaTraslado')!.value);
+
+
+
+    this.genForm.get('idEntidadConcesionario')?.setValue(this.idEntidadConcesionarioTemp);
+    this.genForm.get('idEntidadCliente')?.setValue(this.idEntidadclienteTemp);
+    this.genForm.get('idTransporteCarreta')?.setValue(this.idCarretaTemp);
+    this.genForm.get('idTransporteTractor')?.setValue(this.idTractorTemp);
+    this.genForm.get('idUbigeoDestino')?.setValue(this.idUbigeoDestinoTemp);
+    this.genForm.get('idUbigeoOrigen')?.setValue(this.idUbigeoOrigenTemp);
+    this.genForm.get('idChofer')?.setValue(this.idChoferTemp);
+    this.genForm.get('peso')?.setValue(0);
+    this.genForm.get('fecha')?.setValue('2024-06-01');
 
     console.log('formgroup' ,this.genForm);
 
 
-    if ( (this.idEntidadConcesionarioTemp !=0 && this.idEntidadConcesionarioTemp !=0)   &&   (this.idEntidadConcesionarioTemp === this.idEntidadclienteTemp)){
+    if ( this.idEntidadConcesionarioTemp === this.idEntidadclienteTemp){
       Swal.fire(
         'Información!',
         'Cliente y Concesionario no pueden ser iguales.',
         'warning'
       );
-     return false;
+     // return false;
     }
-
+    //console.log(this.genForm);
     if (!this.genForm.valid) {
-      alert('formulario no valido')
-      console.log('formulario no valido',this.genForm);
-       return false;
+      //alert('Por favor llene todos los campos requeridos')
+     // return false;
     } else {
-      console.log('salvar');
+    //  console.log(this.genForm.value)
       this.saveGuiaTransportista();
-      return true;
+      //return true;
     }
 
-
+    console.log('formgroup2' ,this.genForm);
   }
 
-//  parallenarlosSelectEnEdicion(){
-//   const selectedOption = this.listaEntidadCliente.find(option => option.id = 1612);
-//   if (selectedOption) {
-//     this.stateCtrlCliente.setValue(selectedOption);
-//   }
-//  }
-
-
-  private retornarValor(au:Autocomplete):number{
-     return au.id;
+ parallenarlosSelectEnEdicion(){
+  const selectedOption = this.listaEntidadCliente.find(option => option.id = 1612);
+  if (selectedOption) {
+    this.stateCtrlCliente.setValue(selectedOption);
   }
+ }
+
+
+
 
   onBack() {
 
-    //  console.log(this.genForm);
-    //   console.log(this.genForm.get('idChofer')!.value);
-    //   let inchofer= this.retornarValor(this.genForm.get('idChofer')!.value);
-     console.log("inchofer") ;
-     const guia: GuiaTransportista = {
-      id                    : this.genForm.get('id')?.value === null ? 0 : this.genForm.get('id')?.value,
-      serie                 : this.genForm.get('serie')!.value,
-      numero                : this.genForm.get('numero')!.value,
-      idEntidadCliente      : this.retornarValor(this.genForm.get('idEntidadCliente')!.value),
-      idEntidadConcesionario: this.retornarValor(this.genForm.get('idEntidadConcesionario')!.value),
-      idTransporteCarreta   : this.retornarValor(this.genForm.get('idTransporteCarreta')!.value),
-      idChofer              : this.retornarValor(this.genForm.get('idChofer')!.value),
-      idTransporteTractor   : this.retornarValor(this.genForm.get('idTransporteTractor')!.value),
-      idUbigeoDestino       : this.retornarValor(this.genForm.get('idUbigeoDestino')!.value),
-      idUbigeoOrigen        : this.retornarValor(this.genForm.get('idUbigeoOrigen')!.value),
-
-      fecha                 : '2024-03-03',//this.genForm.get('fecha')!.value,
-      fechaTraslado         : this.genForm.get('fechaTraslado')!.value,
-      peso                  : '0',//this.genForm.get('peso')!.value,
-      estado                : 1,//this.genForm.get('estado')!.value,
-      direccionDestino      : this.genForm.get('direccionDestino')!.value,
-      direccionOrigen       : this.genForm.get('direccionOrigen')!.value,
-      rutaXml               : '',//this.genForm.get('rutaXml')!.value,
-      rutaPdf               : '',//this.genForm.get('rutaPdf')!.value,
-      rutaCdr               : '',//this.genForm.get('rutaCdr')!.value,
-
-    };
-       console.log(guia);
-  }
-    // let autoid:Autocomplete =  this.genForm.get('idEntidadCliente')!.value;
-    // let auto2:Autocomplete;
-
-    // auto2 =this.genForm.get('idEntidadCliente')!.value;
-
-    // console.log("autocomplete");
-   // const valiex =this.genForm.get('id')?.value ===null?0:this.genForm.get('id')!.value
-
-    // console.log('p-1',valiex);
-    //  console.log('p-2',this.genForm.get('serie')!.value)
-    //  console.log('p-3',this.genForm.get('numero')!.value)
-    //  console.log('p-4',this.retornarValor(this.genForm.get('idEntidadCliente')!.value))
-    //  console.log('p-5',this.retornarValor(this.genForm.get('idEntidadConcesionario')!.value))
-    //  console.log('p-6',this.retornarValor(this.genForm.get('idTransporteCarreta')!.value))
-    //  console.log('p-7',this.retornarValor(this.genForm.get('idChofer')!.value))
-    //  console.log('p-8',this.retornarValor(this.genForm.get('idTransporteTractor')!.value))
-    //  console.log('p-9',this.retornarValor(this.genForm.get('idUbigeoDestino')!.value))
-    //  console.log('p-10',this.retornarValor(this.genForm.get('idUbigeoOrigen')!.value))
-
-
-    // const guia: GuiaTransportista = {
-    //   id                    : this.genForm.get('id')!.value ==null?0:this.genForm.get('id')!.value,
-    //   serie                 : this.genForm.get('serie')!.value,
-    //   numero                : this.genForm.get('numero')!.value,
-    //   idEntidadCliente      : this.retornarValor(this.genForm.get('idEntidadCliente')!.value),
-    //   idEntidadConcesionario: this.retornarValor(this.genForm.get('idEntidadConcesionario')!.value),
-    //   idTransporteCarreta   : this.retornarValor(this.genForm.get('idTransporteCarreta')!.value),
-    //   idChofer              : this.retornarValor(this.genForm.get('idChofer')!.value),
-    //   idTransporteTractor   : this.retornarValor(this.genForm.get('idTransporteTractor')!.value),
-    //   idUbigeoDestino       : this.retornarValor(this.genForm.get('idUbigeoDestino')!.value),
-    //   idUbigeoOrigen        : this.retornarValor(this.genForm.get('idUbigeoOrigen')!.value),
-
-    //   fecha                 : '2024-03-03',//this.genForm.get('fecha')!.value,
-    //   fechaTraslado         : this.genForm.get('fechaTraslado')!.value,
-    //   peso                  : '0',//this.genForm.get('peso')!.value,
-    //   estado                : 1,//this.genForm.get('estado')!.value,
-    //   direccionDestino      : this.genForm.get('direccionDestino')!.value,
-    //   direccionOrigen       : this.genForm.get('direccionOrigen')!.value,
-    //   rutaXml               : '',//this.genForm.get('rutaXml')!.value,
-    //   rutaPdf               : '',//this.genForm.get('rutaPdf')!.value,
-    //   rutaCdr               : '',//this.genForm.get('rutaCdr')!.value,
-    // };
-
-    // console.log(guia);
     //this.stateCtrlCliente.setValue(1612);
     //this._filterStatesConcesionarioEdicion(1612);
     // Lógica para el botón de regresar
     //this.router.navigate(['guiatransportista/listado']);
-
+  }
 
 }

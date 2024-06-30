@@ -23,7 +23,7 @@
     >
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" routerLink="home" >Inicio</a>
+          <a class="nav-link active" aria-current="page" routerLink="/home" >Inicio</a>
         </li>
 
         <li class="nav-item dropdown">
@@ -38,8 +38,8 @@
             Operaciones
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" routerLink="almacen/agregar">Vines</a></li>
-            <li><a class="dropdown-item" routerLink="almacen/listado" >Guias</a></li>
+            <li><a class="dropdown-item" routerLink="/enconstruccion">Vines</a></li>
+            <li><a class="dropdown-item" routerLink="/guiatransportista/listado">GuiasTransportistas</a></li>
             <!-- <li><hr class="dropdown-divider" /></li>
             <li><a class="dropdown-item" routerLink="almacen/asignar" >Liquidaciones</a></li> -->
           </ul>
@@ -56,14 +56,11 @@
             Mantenimientos
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" routerLink="llantas/agregar">Entidades</a></li>
-            <li><a class="dropdown-item" routerLink="llantas/listado">Establecimientos</a></li>
-            <li><a class="dropdown-item" routerLink="llantas/listado">Tarifarios</a></li>
-            <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" routerLink="transporte">Transportes</a></li>
-            <li><a class="dropdown-item" routerLink="llantas/listado">Colores</a></li>
-            <li><a class="dropdown-item" routerLink="chofer">Choferes</a></li>
-
+            <li><a class="dropdown-item" routerLink="/enconstruccion">Entidades</a></li>
+            <li><a class="dropdown-item" routerLink="/enconstruccion">Establecimientos</a></li>
+            <li><a class="dropdown-item" routerLink="/enconstruccion">Tarifarios</a></li>
+            <li><hr class="dropdown-divider" /></li>   <li><a class="dropdown-item" routerLink="/transporte/listado">Transportes</a></li>
+            <li><a class="dropdown-item" routerLink="/chofer/listado">Choferes</a></li>
 
           </ul>
         </li>
@@ -79,8 +76,8 @@
             Seguridad
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Usuario</a></li>
-            <li><a class="dropdown-item" href="#">Accesos</a></li>
+            <li><a class="dropdown-item" routerLink="/enconstruccion">Usuario</a></li>
+            <li><a class="dropdown-item" routerLink="/enconstruccion">Accesos</a></li>
 
           </ul>
         </li>
@@ -94,6 +91,13 @@
           aria-label="Search"
         />
         <button class="btn btn-outline-light" type="submit">Buscar</button>
+        <!-- <button class="btn btn-outline-light" style="padding-left: 10px;" mat-button *ngIf="authService.isLoggedIn()" (click)="logout()">Logout</button> -->
+        <div class="example-button-container" >
+          <button  mat-mini-fab aria-label="Example icon button with a menu icon" color="primary" (click)="logout()"   matTooltipPosition="right"  matTooltip="Cerrar Sesion"  >
+            <mat-icon>logout</mat-icon>
+          </button>
+        </div>
+
       </form>
     </div>
   </div>

@@ -38,6 +38,7 @@ export class GuiaTransportistaDataService {
   }
 
   insert(guiatransportista: GuiaTransportista): Observable<GuiaTransportista> {
+    console.log("dataservice:", guiatransportista);
     return this.http.post<GuiaTransportista>(urlCreate, guiatransportista)
       .pipe(catchError(this.handleError));
   }
@@ -53,7 +54,9 @@ export class GuiaTransportistaDataService {
   }
 
   getFilteredData(sieve: Sieve): Observable<GuiaTransportista[]>{
+    console.log("dataservice", sieve );
      return this.http.post<GuiaTransportista[]>(`${urlPagination}`, sieve)
+
      .pipe(catchError(this.handleError));
   }
 

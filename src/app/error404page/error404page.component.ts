@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  selector: 'app-error404page',
+  templateUrl: './error404page.component.html',
+  styleUrls: ['./error404page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent { }
+export class Error404pageComponent { }

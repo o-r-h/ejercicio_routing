@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './home/home.component';
+
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
+import { enconstruccionPageComponent } from './enconstruccion/enconstruccionpage.component';
+import { HomeComponent } from './home/home.component';
+import { Error404pageComponent } from './error404page/error404page.component';
 
 
 const routes: Routes = [
@@ -18,15 +21,16 @@ const routes: Routes = [
     // { path: 'guiatransportista', loadChildren: ()=>import('./guiatransportista/guiatransportista.module').then(m=>m.GuiaTransportistaModule), canActivate: [AuthGuard]},
 
 
-    { path: '',      redirectTo: 'home',  pathMatch: 'full' },
-    { path: 'home',  component: HomeComponent},
 
-    { path: '**',    redirectTo: '404'  },
-    { path: 'chofer', loadChildren: ()=>import('./chofer/chofer.module').then(m=>m.ChoferModule)},
-    { path: 'transporte', loadChildren: ()=>import('./transporte/transporte.module').then(m=>m.TransporteModule), },
-    { path: 'pruebas', loadChildren: ()=>import('./pruebas/pruebas.module').then(m=>m.PruebasModule), },
-    { path: 'guiatransportista', loadChildren: ()=>import('./guiatransportista/guiatransportista.module').then(m=>m.GuiaTransportistaModule), },
-
+    { path: 'login', component: LoginComponent },
+    { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: 'enconstruccion', component: enconstruccionPageComponent  },
+    { path: 'chofer', loadChildren: ()=>import('./chofer/chofer.module').then(m=>m.ChoferModule), canActivate: [AuthGuard] },
+    { path: 'transporte', loadChildren: ()=>import('./transporte/transporte.module').then(m=>m.TransporteModule),  canActivate: [AuthGuard] },
+    { path: 'pruebas', loadChildren: ()=>import('./pruebas/pruebas.module').then(m=>m.PruebasModule), canActivate: [AuthGuard] },
+    { path: 'guiatransportista', loadChildren: ()=>import('./guiatransportista/guiatransportista.module').then(m=>m.GuiaTransportistaModule), canActivate: [AuthGuard] },
+    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: '**', pathMatch: 'full', component:Error404pageComponent }
 ]
 
 @NgModule({

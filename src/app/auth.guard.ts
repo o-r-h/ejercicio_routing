@@ -1,21 +1,23 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard {//implements CanActivate {
+export class AuthGuard implements CanActivate {
 
-  // constructor(private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  // canActivate(): boolean {
-  //   const isAuthenticated = !!localStorage.getItem('token'); // Verifica si hay un token de autenticación
-
-  //   //  if (!isAuthenticated) {
-  //   //    this.router.navigate(['/login']);
-  //   //   return false;
-  //   //  }
-  //   console.log("autoguard");
-  //    return true;
-  // }
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): boolean | UrlTree {
+    if (this.authService.isLoggedIn()) {
+      return true;
+    } else {
+      this.router.navigate(['/login']);
+      return false;
+    }
+  }
 }
